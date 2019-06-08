@@ -18,22 +18,50 @@
       <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
       <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
     </ul>
-    <h3>Ecosystem</h3>
+    <h3>cccccccc{{bankName}}</h3>
     <ul>
       <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
       <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
       <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
       <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
+      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">a1wesome-vue</a></li>
     </ul>
   </div>
 </template>
 
 <script>
+// import VuexState from '../vuex_state.js'
 export default {
+  // VuexState,
   name: 'HelloWorld',
   props: {
     msg: String
+  },
+  created : function() {
+    this.$Cm.api('user/login', {
+      access : 'admin',
+      password : 'admin',
+      oauth_type : 'pwd',
+      port_type : 'api'
+    }).then(res => {
+      this.$store.commit('SetToken',{
+        type : 'refresh',
+        value : res.data.refresh_token
+      })
+      this.$store.commit('SetToken',{
+        value : res.data.access_token
+      })
+      this.$Cm.api()
+      console.log(res)
+    })
+
+    // console.log(ss)
+  },
+  computed: {
+    bankName() {
+      // console.log(this.$store)
+      return 2
+    }
   }
 }
 </script>
