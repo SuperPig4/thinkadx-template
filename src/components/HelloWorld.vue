@@ -1,6 +1,6 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
+    <h1>{{ msg }}22</h1>
     <p>
       For a guide and recipes on how to configure / customize this project,<br>
       check out the
@@ -26,6 +26,8 @@
       <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
       <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">a1wesome-vue</a></li>
     </ul>
+
+    <div @click="sendS">点击1</div>
   </div>
 </template>
 
@@ -38,31 +40,48 @@ export default {
     msg: String
   },
   created : function() {
-    this.$Cm.api('user/login', {
-      access : 'admin',
-      password : 'admin',
-      oauth_type : 'pwd',
-      port_type : 'api'
-    }).then(res => {
-      this.$store.commit('SetToken',{
-        type : 'refresh',
-        value : res.data.refresh_token
-      })
-      this.$store.commit('SetToken',{
-        value : res.data.access_token
-      })
-      this.$Cm.api()
-      console.log(res)
-    })
+    // if(!this.$store.getters.getToken()) {
+    //   this.$Cm.api('user/login', {
+    //     access : 'admin',
+    //     password : 'admin',
+    //     oauth_type : 'pwd',
+    //     port_type : 'api'
+    //   },{},false).then(res => {
+    //     this.$store.commit('SetToken',{
+    //       type : 'refresh',
+    //       value : Object.assign({
+    //         time : parseInt(Date.now() / 1000)
+    //       }, res.data.refresh_token)
+    //     })
+    //     this.$store.commit('SetToken',{
+    //       value : Object.assign({
+    //         time : parseInt(Date.now() / 1000)
+    //       },res.data.access_token)
+    //     })
+    //   })
+    // }
 
-    // console.log(ss)
+    // this.$Cm.test();
+    // this.$Modal.error({
+    //     title: '提示',
+    //     content: 'daww'
+    // });
   },
   computed: {
     bankName() {
       // console.log(this.$store)
       return 2
     }
-  }
+  },
+  methods: {
+    sendS () {
+      // console.log(this.$route.path)
+      // this.$Cm.test();
+      this.$Cm.api('user/info')
+      this.$Cm.api('user/info')
+      this.$Cm.api('user/info')
+    }
+  },
 }
 </script>
 
