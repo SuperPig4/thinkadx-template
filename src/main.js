@@ -8,6 +8,7 @@ import iview from 'iview'
 import router from './router_index.js'
 
 import 'iview/dist/styles/iview.css'
+import './assets/css/init.css'
 
 Vue.config.productionTip = false
 

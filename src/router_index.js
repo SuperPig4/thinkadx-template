@@ -13,7 +13,8 @@ const router = new VueRouter({
         },
         {
             path : '/main',
-            component : resolve => require(['@/components/HelloWorld'], resolve),
+            // component : resolve => require(['@/components/HelloWorld'], resolve),
+            component : resolve => require(['@/components/Index'], resolve),
         }
     ]
 })
@@ -22,6 +23,8 @@ router.beforeEach((to, from, next) => {
     // if((!null) && to.path != '/') {
     if((!store.getters.getToken()) && to.path != '/') {
         next('/')
+    } else if(store.getters.getToken() && to.path == '/') {
+        next({path : 'main'})
     } else {
         next()
     }
