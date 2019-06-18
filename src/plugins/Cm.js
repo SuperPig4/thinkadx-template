@@ -35,7 +35,10 @@ export default {
         Vue.prototype.$Cm = {
             test () {
                 console.log(router)
-                
+            },
+            // 获得配置信息
+            getConfig () {
+                return Config
             },
             // 登陆成功初始化 配置参数
             loginSuccessInitConfig () {
@@ -50,6 +53,30 @@ export default {
                     router.push({ path:'/' })
                 }
             },
+            // 接口header鉴权 - 构造函数
+            getApiHeaderData (data = {}, isUseToken = true) {
+                return new (function(data, isUseToken) {
+                    if(isUseToken === true && store.state.access_token.token) {
+                        this.token = store.getters.getToken()
+                    }
+                    this.timestamp = parseInt(Date.now()/1000)
+                    this.nonce = Math.random().toString(36).substr(2)
+                    this.sign = ((data) => {
+                        let paramsAr = [], 
+                        cloneData = Object.assign(Object.assign({},this), data)
+                        for(let i in cloneData) {
+                            cloneData[i] == null && (cloneData[i] = '')
+                            let item = cloneData[i]
+                            paramsAr.push(i + '=' + encodeURIComponent(item).replace(/[!'()*]/g, function(c) {
+                                return '%' + c.charCodeAt(0).toString(16).toUpperCase();
+                            }))
+                        }   
+                        console.log(paramsAr.sort().join('&'))
+                        return md5(paramsAr.sort().join('&')).toUpperCase()
+                    })(data)
+                }) (data, isUseToken)
+            },
+            // 请求接口
             api (
                 //接口地址
                 url, 
@@ -65,26 +92,7 @@ export default {
                 return new Promise((resolve, reject) => {
                     let header = Object.assign({},{
                         'Content-Type':'application/json'
-                    },defaultHeader, new (function(data, isUseToken) {
-                        if(isUseToken === true && store.state.access_token.token) {
-                            this.token = store.getters.getToken()
-                        }
-                        this.timestamp = parseInt(Date.now()/1000)
-                        this.nonce = Math.random().toString(36).substr(2)
-                        this.sign = ((data) => {
-                            let paramsAr = [], 
-                            cloneData = Object.assign(Object.assign({},this), data)
-                            for(let i in cloneData) {
-                                cloneData[i] == null && (cloneData[i] = '')
-                                let item = cloneData[i]
-                                paramsAr.push(i + '=' + encodeURIComponent(item).replace(/[!'()*]/g, function(c) {
-                                    return '%' + c.charCodeAt(0).toString(16).toUpperCase();
-                                }))
-                            }   
-                            console.log(paramsAr.sort().join('&'))
-                            return md5(paramsAr.sort().join('&')).toUpperCase()
-                        })(data)
-                    }) (data, isUseToken))
+                    },defaultHeader, new this.getApiHeaderData(data, isUseToken))
 
                     Vue.axios({
                         method : 'POST',

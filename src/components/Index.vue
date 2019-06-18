@@ -115,7 +115,7 @@
                         <BreadcrumbItem>Layout</BreadcrumbItem>
                     </Breadcrumb>
                     <Content :style="{padding: '24px', background: '#fff'}">
-                        Content
+                        <router-view></router-view>
                     </Content>
                 </Layout>
             </Layout>

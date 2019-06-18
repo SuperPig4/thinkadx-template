@@ -11,10 +11,10 @@ import HelloWorld from './components/HelloWorld.vue'
 
 
 export default {
-  name: 'app',
-  components: {
+    name: 'app',
+    components: {
     HelloWorld
-  }
+    }
 }
 </script>
 
@@ -23,7 +23,7 @@ export default {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+  /* text-align: center; */
   color: #2c3e50;
   height:100%;
   /* margin-top: 60px; */
@@ -36,4 +36,8 @@ export default {
 @media all and (max-height: 768px) {
     html, body {height: 768px;}
 }
+
+.G-form{ margin-top:20px; width:400px }
+.G-form .ivu-form-item-label{ width:130px !important }
+
 </style>

@@ -13,8 +13,25 @@ const router = new VueRouter({
         },
         {
             path : '/main',
-            // component : resolve => require(['@/components/HelloWorld'], resolve),
             component : resolve => require(['@/components/Index'], resolve),
+            children : [
+                {
+                    path : 'menu_index',
+                    component : resolve => require(['@/components/Menu/Index'], resolve)
+                },
+                {
+                    path : 'menu_add_edit/:id?',
+                    component : resolve => require(['@/components/Menu/AddEdit'], resolve)
+                },
+                {
+                    path : 'menu_edit',
+                    component : resolve => require(['@/components/Menu/AddEdit'], resolve)
+                },
+                {
+                    path : '',
+                    component : resolve => require(['@/components/Menu/Index'], resolve)
+                }
+            ]
         }
     ]
 })
