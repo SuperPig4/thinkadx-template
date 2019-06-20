@@ -98,7 +98,7 @@ export default {
   methods: {
     submit() {
         this.isLogin = true
-        this.$Cm.api('admin_user/login',{
+        this.$Cm.api('admin/admin_user/login',{
             access: this.user,
             password: this.password,
             oauth_type: "pwd",

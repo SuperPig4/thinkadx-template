@@ -8,12 +8,13 @@ export default {
         //配置参数
         let Config = {
             //接口域名配置
-            apiDomain : 'http://www.thinkadx-v2.cn/admin/',
+            // apiDomain : 'http://www.thinkadx-v2.cn/admin/',
+            apiDomain : 'http://www.thinkadx-v2.cn/',
             // 是否可执行强制退出操作,这个参数主要是为了防止强制退出被多次调用
             isAllowForceDropOutLogin : true
         }, RefreshTokenLogic = function() {
             return new Promise((resolve, reject) => {
-                Vue.prototype.$Cm.api('user/rese_token',{
+                Vue.prototype.$Cm.api('admin/admin_user/rese_token',{
                     refresh_token : store.getters.getToken('refresh'),
                     old_token : store.getters.getToken(),
                 }, {}, false).then(res => {
@@ -31,6 +32,33 @@ export default {
                 })
             })
         }
+
+        // 全局过滤器
+        Vue.filter('formatData', (value) => {
+            if(isNaN(value)) {
+                return ''
+            } else {
+                let date = new Date(parseInt((parseInt(value) * 1000)));
+                let y = date.getFullYear();
+                let MM = date.getMonth() + 1;
+                MM = MM < 10 ? ('0' + MM) : MM;
+                let d = date.getDate();
+                d = d < 10 ? ('0' + d) : d;
+                let h = date.getHours();
+                h = h < 10 ? ('0' + h) : h;
+                let m = date.getMinutes();
+                m = m < 10 ? ('0' + m) : m;
+                let s = date.getSeconds();
+                s = s < 10 ? ('0' + s) : s;
+                return y + '-' + MM + '-' + d + ' ' + h + ':' + m + ':' + s;
+            }
+        })
+
+        // Vue.filter('formatImage', (value) => {
+        //     return Config.apiDomain + '/' + value
+        //     // http://www.thinkadx-v2.cn/uploads/menu_icon/58/e333d01203ffbc42f4b97f8387ce57.jpg
+        // })
+        
         
         Vue.prototype.$Cm = {
             test () {
@@ -131,6 +159,21 @@ export default {
                                         break;
                                 }
                             } else {
+                                runData.run = function(sucIsShow = true, errIsShow = true) {
+                                    return new Promise((o, r) => {
+                                        if(this.code) {
+                                            if(sucIsShow == true) {
+                                                iview.Message.success(this.msg)
+                                            }
+                                            o(this)
+                                        } else {
+                                            if(errIsShow == true) {
+                                                iview.Message.error(this.msg)
+                                            }
+                                            r(this)
+                                        }
+                                    })
+                                }
                                 resolve(runData)
                             }
                         } else {
