@@ -20,11 +20,7 @@ const router = new VueRouter({
                     component : resolve => require(['@/components/Menu/Index'], resolve)
                 },
                 {
-                    path : 'menu_add_edit/:id?',
-                    component : resolve => require(['@/components/Menu/AddEdit'], resolve)
-                },
-                {
-                    path : 'menu_edit',
+                    path : 'menu_add_edit/:fid/:id?',
                     component : resolve => require(['@/components/Menu/AddEdit'], resolve)
                 },
                 {

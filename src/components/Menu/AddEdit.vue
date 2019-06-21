@@ -92,6 +92,7 @@
             </div>
 
             <FormItem>
+                <Button @click="test" type="primary">返回</Button>
                 <Button @click="submit" type="primary">提交</Button>
             </FormItem>
         </Form>
@@ -102,7 +103,7 @@
     export default {
         data () {
             return {
-                id : 1,
+                id : 0,
                 headers : {},
                 otherData : {
                     path : 'menu_icon'
@@ -155,8 +156,15 @@
                     this.submitData = res.data
                 })
             }
+
+            if(this.$route.params.fid) {
+                this.submitData.father_id = this.$route.params.fid
+            }
         },
         methods : {
+            test () {
+                this.$router.go(-1)
+            },
             submit () {
                 this.$refs['formValidate'].validate(valiRes => {
                     if(valiRes) {

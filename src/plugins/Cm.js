@@ -53,12 +53,6 @@ export default {
                 return y + '-' + MM + '-' + d + ' ' + h + ':' + m + ':' + s;
             }
         })
-
-        // Vue.filter('formatImage', (value) => {
-        //     return Config.apiDomain + '/' + value
-        //     // http://www.thinkadx-v2.cn/uploads/menu_icon/58/e333d01203ffbc42f4b97f8387ce57.jpg
-        // })
-        
         
         Vue.prototype.$Cm = {
             test () {

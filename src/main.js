@@ -31,7 +31,7 @@ new Vue({
         }
     },
     created() {
-        this.iviewConfig.uploadUrl = this.$Cm.getConfig().apiDomain + '/upload/index'
+        this.iviewConfig.uploadUrl = this.$Cm.getConfig().apiDomain + '/admin/upload/index'
     },
     store,
     router,
