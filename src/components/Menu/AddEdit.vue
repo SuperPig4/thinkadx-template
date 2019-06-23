@@ -12,7 +12,7 @@
             <FormItem label="状态">
                 <i-switch v-model="submitData.status" />
             </FormItem>
-            <FormItem label="图标" prop="icon" >
+            <FormItem label="图标" prop="icon" v-if="$route.params.fid == 0" >
                 <Upload 
                     v-show="!submitData.icon"
                     name="image"
@@ -87,60 +87,75 @@
                     // father_id : 0,
                 },
                 ruleValidate : {
-                    icon : [
-                        {
-                            required : true,
-                            validator (rule, value, callback, source, options) {
-                                if(!value) {
-                                    callback('请上传图标')
-                                } else {
-                                    callback();
-                                }
-                            }
-                        },
-                    ],
                     title : [
                         {required : true, message: '请输入标题', trigger: 'blur' }
                     ],
-                    module : [
-                        {required : true, message: '请输入模块', trigger: 'blur' }
-                    ],
-                    controller : [
-                        {required : true, message: '请输入控制器', trigger: 'blur' }
-                    ],
-                    action : [
-                        {required : true, message: '请输入方法', trigger: 'blur' }
-                    ]
                 }
             }
         },
         created() {
-            if(this.$route.params.id) {
-                this.id = this.$route.params.id
-                this.$Cm.api('admin/menu/detail',{
-                    id : this.$route.params.id
-                }).then(res => {
-                    res.run(false)
-                    res.data.icon = res.data.icon.url
-                    res.data.status = Boolean(res.data.status)
-                    this.submitData = res.data
+            this.setRule().then(() => {
+                if(this.$route.params.id) {
+                    this.id = this.$route.params.id
+                    this.$Cm.api('admin/menu/detail',{
+                        id : this.$route.params.id
+                    }).then(res => {
+                        res.run(false)
+                        res.data.icon = res.data.icon.url
+                        res.data.status = Boolean(res.data.status)
+                        this.submitData = res.data
+                        this.isShowLoading = false
+                    })
+                } else {
                     this.isShowLoading = false
-                })
-            } else {
-                this.isShowLoading = false
-            }
+                }
 
-            if(this.$route.params.fid) {
-                this.submitData.father_id = this.$route.params.fid
-            }
+                if(this.$route.params.fid) {
+                    this.submitData.father_id = this.$route.params.fid
+                }
+            })
         },
         methods : {
+            // 根据fid决定验证规则
+            setRule () {
+                return new Promise((resolve, reject) => {
+                    if(this.$route.params.fid == 0) {
+                        this.ruleValidate.icon = [
+                            {
+                                required : true,
+                                validator (rule, value, callback, source, options) {
+                                    if(!value) {
+                                        callback('请上传图标')
+                                    } else {
+                                        callback();
+                                    }
+                                }
+                            },
+                        ]
+                    } else {
+                        Object.assign( this.ruleValidate, {
+                            module : [
+                                {required : true, message: '请输入模块', trigger: 'blur' }
+                            ],
+                            controller : [
+                                {required : true, message: '请输入控制器', trigger: 'blur' }
+                            ],
+                            action : [
+                                {required : true, message: '请输入方法', trigger: 'blur' }
+                            ]
+                        })
+                    }
+                    resolve()
+                })
+            },
             submit () {
                 this.$refs['formValidate'].validate(valiRes => {
                     if(valiRes) {
+                        this.isShowLoading = true
                         this.$Cm.api('admin/menu/add_edit', Object.assign({}, this.submitData, {
                             status : Number(this.submitData.status)
                         })).then(res => {
+                            this.isShowLoading = false
                             res.run().then(() => {
                                 this.$router.back()
                             })

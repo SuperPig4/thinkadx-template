@@ -91,6 +91,8 @@ export default {
                             let item = cloneData[i]
                             paramsAr.push(i + '=' + encodeURIComponent(item).replace(/[!'()*]/g, function(c) {
                                 return '%' + c.charCodeAt(0).toString(16).toUpperCase();
+                            }).replace(/%20/g, function(c) {
+                                return '+'
                             }))
                         }   
                         console.log(paramsAr.sort().join('&'))

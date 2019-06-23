@@ -95,7 +95,7 @@ export default {
                         class : 'button-x',
                         on: {
                             click: () => { 
-                                this.jumpAddEdit(data.father_id)
+                                this.jumpAddEdit(data.id)
                             }
                         }
                     }),

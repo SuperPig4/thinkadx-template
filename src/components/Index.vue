@@ -4,12 +4,12 @@
 .layout-logo img{height:100%;}
 .layout-nav{width: 420px;margin: 0 auto; margin-right: 20px;}
 .layout-nav>li{ float:right !important;}
-.Sider{ width: 15% !important; min-width: 15% !important; max-width: 15% !important; height:100%; background: #fff;}
+.Sider{ position: relative;  width: 15% !important; min-width: 15% !important; max-width: 15% !important; height:100%; background: #fff;}
 .Sider li{ text-align: center;}
 .ivu-menu-submenu-title{ padding-left:30px !important; text-align: left !important;}
 .ivu-menu-item{padding-left:20px !important;}
 .refresh{ position:absolute; top:80px; right:40px; }
-
+.menu-icon{ width:14px; height:14px; position: relative; top:2px; }
 </style>
 <template>
     <div class="layout">
@@ -45,33 +45,7 @@
 
             <Layout :style="{height:'100%'}" >
                 <Sider hide-trigger class="Sider" >
-                    <Menu active-name="1-2" theme="light" width="auto" :open-names="['1']">
-                        <Submenu name="1">
-                            <template slot="title">
-                                <Icon type="ios-navigate"></Icon>
-                                Item 1
-                            </template>
-                            <MenuItem name="1-1">Option 1</MenuItem>
-                            <MenuItem name="1-2">Option 2</MenuItem>
-                            <MenuItem name="1-3">Option 3</MenuItem>
-                        </Submenu>
-                        <Submenu name="2">
-                            <template slot="title">
-                                <Icon type="ios-keypad"></Icon>
-                                Item 2
-                            </template>
-                            <MenuItem name="2-1">Option 1</MenuItem>
-                            <MenuItem name="2-2">Option 2</MenuItem>
-                        </Submenu>
-                        <Submenu name="3">
-                            <template slot="title">
-                                <Icon type="ios-analytics"></Icon>
-                                Item 3
-                            </template>
-                            <MenuItem name="3-1">Option 1</MenuItem>
-                            <MenuItem name="3-2">Option 2</MenuItem>
-                        </Submenu>
-                    </Menu>
+                    <CmMenu />
                 </Sider>
                 <Layout :style="{padding: '0 24px 24px'}" >
                     <Button @click="refreshAct" title="刷新" class="refresh" type="primary" shape="circle" icon="md-refresh"></Button>
@@ -93,10 +67,21 @@
     </div>
 </template>
 <script>
+    import CmMenu from './Menu'
     export default {
         data () {
             return {
+                menuList : []
             }
+        },
+        components : {
+            CmMenu
+        },
+        created () {
+            // 菜单
+            this.$Cm.api('admin/menu/get_list').then(res => {
+                this.menuList = res.data
+            })
         },
         methods: {
             refreshAct () {
