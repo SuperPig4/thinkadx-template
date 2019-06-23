@@ -8,7 +8,7 @@
 .Sider li{ text-align: center;}
 .ivu-menu-submenu-title{ padding-left:30px !important; text-align: left !important;}
 .ivu-menu-item{padding-left:20px !important;}
-.refresh{ position:absolute; top:80px; right:30px; }
+.refresh{ position:absolute; top:80px; right:40px; }
 
 </style>
 <template>
@@ -73,14 +73,14 @@
                         </Submenu>
                     </Menu>
                 </Sider>
-                <Layout :style="{padding: '0 24px 24px'}">
+                <Layout :style="{padding: '0 24px 24px'}" >
                     <Button @click="refreshAct" title="刷新" class="refresh" type="primary" shape="circle" icon="md-refresh"></Button>
                     <Breadcrumb :style="{margin: '24px 0', textAlign:'left'}">
                         <BreadcrumbItem>Home</BreadcrumbItem>
                         <BreadcrumbItem>Components</BreadcrumbItem>
                         <BreadcrumbItem>Layout</BreadcrumbItem>
                     </Breadcrumb>
-                    <Content :style="{padding: '24px', background: '#fff'}">
+                    <Content :style="{padding: '24px', background: '#fff'}" >
                         <keep-alive>
                             <router-view v-if="$route.path.indexOf('index') != -1" ></router-view>
                         </keep-alive>

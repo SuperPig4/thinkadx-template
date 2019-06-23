@@ -1,49 +1,16 @@
 <style>
-
-    .img-upload{
-        position: relative;
-        width:60px; 
-        height:60px;
-        border-radius: 5px;
-        overflow: hidden;
-    }
-
-    .img-upload img{ 
-        width:100%; 
-        height:100%;
-    }
-
-    .img-upload:hover .make-action{
-        display:flex;
-    }
-
-    .img-upload .make-action{
-        display: none;
-        justify-content: center;
-        align-items: center;
-        position:absolute;
-        top:0px;
-        left:0px;
-        width:60px;
-        height:60px;
-        border-radius: 5px;
-        background:rgba(0,0,0,0.6);
-    }
-
-    .img-upload .make-action i{
-        color:#fff;
-        font-size:23px;
-        cursor: pointer;
-        margin: 0 2px;
-    }
-    
-
+    .img-upload{position: relative;width:60px; height:60px;border-radius: 5px;overflow: hidden;}
+    .img-upload img{ width:100%; height:100%;}
+    .img-upload:hover .make-action{display:flex;}
+    .img-upload .make-action{display: none;justify-content: center;align-items: center;position:absolute;top:0px;left:0px;width:60px;height:60px;border-radius: 5px;background:rgba(0,0,0,0.6);}
+    .img-upload .make-action i{color:#fff;font-size:23px;cursor: pointer;margin: 0 2px;}
 </style>
 <template>
-    <div>
+    <div class="G-page" >
+        <Spin size="large" fix v-show="isShowLoading" ></Spin>
         <Form class="G-form" ref="formValidate" :rules="ruleValidate" :model="submitData" :label-width="$root.iviewConfig.formLabelWidth" label-position="right" >
             <FormItem label="状态">
-                <i-switch :value="submitData.status == 1" />
+                <i-switch v-model="submitData.status" />
             </FormItem>
             <FormItem label="图标" prop="icon" >
                 <Upload 
@@ -81,7 +48,7 @@
 
             <div v-if="id" >
                 <FormItem>
-                <Divider />
+                    <Divider />
                 </FormItem>
                 <!-- <FormItem label="上级栏目" >
                     <Input disabled :value="submitData.father && submitData.father.title" placeholder="请输入标题"></Input>
@@ -92,8 +59,9 @@
             </div>
 
             <FormItem>
-                <Button @click="test" type="primary">返回</Button>
                 <Button @click="submit" type="primary">提交</Button>
+                <Divider />
+                <Button class="back" size="large" icon="ios-arrow-back" @click="$router.back()">返回</Button>
             </FormItem>
         </Form>
     </div>
@@ -104,6 +72,7 @@
         data () {
             return {
                 id : 0,
+                isShowLoading : true,
                 headers : {},
                 otherData : {
                     path : 'menu_icon'
@@ -114,7 +83,7 @@
                     module : '',
                     controller : '',
                     action : '',
-                    status : 1,
+                    status : true,
                     // father_id : 0,
                 },
                 ruleValidate : {
@@ -153,8 +122,12 @@
                 }).then(res => {
                     res.run(false)
                     res.data.icon = res.data.icon.url
+                    res.data.status = Boolean(res.data.status)
                     this.submitData = res.data
+                    this.isShowLoading = false
                 })
+            } else {
+                this.isShowLoading = false
             }
 
             if(this.$route.params.fid) {
@@ -162,14 +135,15 @@
             }
         },
         methods : {
-            test () {
-                this.$router.go(-1)
-            },
             submit () {
                 this.$refs['formValidate'].validate(valiRes => {
                     if(valiRes) {
-                        this.$Cm.api('admin/menu/add_edit', this.submitData).then(res => {
-                            res.run()
+                        this.$Cm.api('admin/menu/add_edit', Object.assign({}, this.submitData, {
+                            status : Number(this.submitData.status)
+                        })).then(res => {
+                            res.run().then(() => {
+                                this.$router.back()
+                            })
                         })
                     }
                 })
@@ -186,7 +160,7 @@
                 }
             },
             delUploadImg () {
-                this.submitData.icon = {}
+                this.submitData.icon = ''
                 this.$refs.upload.clearFiles()
             },
             uploadBefore () {

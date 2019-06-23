@@ -35,7 +35,7 @@ export default {
     html, body {height: 768px;}
 }
 
-.G-form{ margin-top:20px; width:400px }
+.G-page{ position: relative;}
+.G-form{ margin-top:20px; width:400px; position: relative; }
 .G-form .ivu-form-item-label{ width:130px !important }
-
 </style>
