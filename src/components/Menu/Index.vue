@@ -23,10 +23,12 @@ export default {
             list : []
         }
     },
-    created : function() {
+    created () {
         this.getListData()
     },
-    
+    activated () {
+        this.$emit('on-topSetPathNameAr', ['系统设置','菜单管理','列表'])
+    },
     methods: {
         getListData () {
             this.$Cm.api('admin/menu/index').then(res => {

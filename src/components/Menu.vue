@@ -4,13 +4,13 @@
 <template>
     <div >
         <Spin size="large" fix v-show="isShowLoading" ></Spin>
-        <Menu theme="light" width="auto">
-            <Submenu :name="item.id" v-for="item in menuList" v-bind:key="item.id" >
+        <Menu theme="light" width="auto" >
+            <Submenu name="2" v-for="item in menuList" v-bind:key="item.id" >
                 <template slot="title">
                     <img :src="item.icon.url" class="menu-icon" ></img>
                     {{item.title}}
                 </template>
-                <MenuItem :name="itemTow.id" v-for="itemTow in item.children" v-bind:key="itemTow.id" >{{itemTow.title}}</MenuItem>
+                <MenuItem name="2" :to="'/main/'+itemTow.controller+'_'+itemTow.action" v-for="itemTow in item.children" v-bind:key="itemTow.id" >{{itemTow.title}}</MenuItem>
             </Submenu>
         </Menu>
     </div>
@@ -29,6 +29,8 @@
                 this.menuList = res.data
                 this.isShowLoading = false
             })
+        },
+        methods : {
         }
     }
 </script>

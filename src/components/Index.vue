@@ -50,15 +50,13 @@
                 <Layout :style="{padding: '0 24px 24px'}" >
                     <Button @click="refreshAct" title="刷新" class="refresh" type="primary" shape="circle" icon="md-refresh"></Button>
                     <Breadcrumb :style="{margin: '24px 0', textAlign:'left'}">
-                        <BreadcrumbItem>Home</BreadcrumbItem>
-                        <BreadcrumbItem>Components</BreadcrumbItem>
-                        <BreadcrumbItem>Layout</BreadcrumbItem>
+                        <BreadcrumbItem v-for="item in pathNameAr" v-bind:key="item" >{{item}}</BreadcrumbItem>
                     </Breadcrumb>
                     <Content :style="{padding: '24px', background: '#fff'}" >
                         <keep-alive>
-                            <router-view v-if="$route.path.indexOf('index') != -1" ></router-view>
+                            <router-view @on-topSetPathNameAr="setPathNameAr" v-if="$route.path.indexOf('index') != -1" ></router-view>
                         </keep-alive>
-                        <router-view v-if="$route.path.indexOf('index') == -1" ></router-view>
+                        <router-view @on-topSetPathNameAr="setPathNameAr" v-if="$route.path.indexOf('index') == -1" ></router-view>
                     </Content>
                 </Layout>
             </Layout>
@@ -71,6 +69,12 @@
     export default {
         data () {
             return {
+                // 路径名
+                pathNameAr : [
+                    '系统设置',
+                    '管理员设置',
+                    '列表'
+                ],
                 menuList : []
             }
         },
@@ -82,8 +86,23 @@
             this.$Cm.api('admin/menu/get_list').then(res => {
                 this.menuList = res.data
             })
+
+            this.$on('test', function() {
+                console.log('run test')
+            })
         },
         methods: {
+            /**
+             * 修改路径名
+             * @param string/array 如果是数组则直接覆盖/否则只是push
+             */
+            setPathNameAr (age) {
+                if(age instanceof Array) {
+                    this.pathNameAr = age
+                } else {
+                    this.pathNameAr.push(age)
+                }
+            },
             refreshAct () {
                 location.reload() 
             },
@@ -95,7 +114,6 @@
                 }
             },
             dropOutLogin () {
-                console.log('执行了')
                 this.$Cm.dropOutLogin()
             }
         },

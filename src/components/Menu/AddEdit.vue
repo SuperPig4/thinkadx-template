@@ -94,6 +94,7 @@
             }
         },
         created() {
+             this.$emit('on-topSetPathNameAr', '编辑')
             this.setRule().then(() => {
                 if(this.$route.params.id) {
                     this.id = this.$route.params.id
