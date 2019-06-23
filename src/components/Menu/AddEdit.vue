@@ -36,13 +36,13 @@
             <FormItem label="标题" prop="title" >
                 <Input v-model="submitData.title" placeholder="请输入标题"></Input>
             </FormItem>
-            <FormItem label="模块" prop="module" >
+            <FormItem label="模块" prop="module" v-if="$route.params.fid != 0" >
                 <Input v-model="submitData.module" placeholder="请输入模块"></Input>
             </FormItem>
-            <FormItem label="控制器" prop="controller" >
+            <FormItem label="控制器" prop="controller" v-if="$route.params.fid != 0" >
                 <Input v-model="submitData.controller" placeholder="请输入控制器"></Input>
             </FormItem>
-            <FormItem label="方法" prop="action" >
+            <FormItem label="方法" prop="action" v-if="$route.params.fid != 0" >
                 <Input v-model="submitData.action" placeholder="请输入方法"></Input>
             </FormItem>
 
