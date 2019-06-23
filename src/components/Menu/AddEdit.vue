@@ -6,7 +6,7 @@
     .img-upload .make-action i{color:#fff;font-size:23px;cursor: pointer;margin: 0 2px;}
 </style>
 <template>
-    <div class="G-page" >
+    <div>
         <Spin size="large" fix v-show="isShowLoading" ></Spin>
         <Form class="G-form" ref="formValidate" :rules="ruleValidate" :model="submitData" :label-width="$root.iviewConfig.formLabelWidth" label-position="right" >
             <FormItem label="状态">
@@ -94,7 +94,7 @@
             }
         },
         created() {
-             this.$emit('on-topSetPathNameAr', '编辑')
+            this.$emit('on-topSetPathNameAr', '编辑')
             this.setRule().then(() => {
                 if(this.$route.params.id) {
                     this.id = this.$route.params.id

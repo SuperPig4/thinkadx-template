@@ -23,6 +23,11 @@ const router = new VueRouter({
                     path : 'menu_add_edit/:fid/:id?',
                     component : resolve => require(['@/components/Menu/AddEdit'], resolve)
                 },
+                // 管理员
+                {
+                    path : 'set_password/:id?',
+                    component : resolve => require(['@/components/Admin/SetPassword'], resolve)
+                },
                 {
                     path : '',
                     component : resolve => require(['@/components/Menu/Index'], resolve)

@@ -32,10 +32,9 @@ export default {
 }
 
 @media all and (max-height: 768px) {
-    html, body {height: 768px;}
+    html, body {height: 768px !important;}
 }
 
-.G-page{ position: relative;}
 .G-form{ margin-top:20px; width:400px; position: relative; }
 .G-form .ivu-form-item-label{ width:130px !important }
 </style>

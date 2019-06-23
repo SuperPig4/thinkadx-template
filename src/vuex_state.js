@@ -13,7 +13,9 @@ const state = new Vuex.Store({
         // 访问令牌
         access_token : {},
         // 刷新令牌
-        refresh_token : {}
+        refresh_token : {},
+        // 用户信息
+        user_info : {}
     },
     getters : {
         getToken : (state) => (type) => {
@@ -29,6 +31,7 @@ const state = new Vuex.Store({
         EmptyUserInfo (state) {
             state.refresh_token = ''
             state.access_token = ''
+            state.user_info = ''
         }, 
         // 修改令牌
         SetToken (state, param) {
@@ -37,7 +40,11 @@ const state = new Vuex.Store({
             } else {
                 state.access_token = param.value
             }
-        }
+        },
+        // 置入用户信息
+        SetUserInfo (state, value) {
+            state.user_info = value
+        } 
     }
 })
 

@@ -27,10 +27,7 @@
                                     <Icon :style="{marginLeft:'10px', color:'#fff'}" type="ios-arrow-down"></Icon>
                                 </a>
                                 <DropdownMenu slot="list">
-                                    <DropdownItem>驴打滚</DropdownItem>
-                                    <DropdownItem>炸酱面</DropdownItem>
-                                    <DropdownItem disabled>豆汁儿</DropdownItem>
-                                    <DropdownItem>冰糖葫芦</DropdownItem>
+                                    <DropdownItem name="setPassword">修改密码</DropdownItem>
                                     <DropdownItem name="dropOutLogin" divided >退出</DropdownItem>
                                 </DropdownMenu>
                             </Dropdown>
@@ -52,7 +49,7 @@
                     <Breadcrumb :style="{margin: '24px 0', textAlign:'left'}">
                         <BreadcrumbItem v-for="item in pathNameAr" v-bind:key="item" >{{item}}</BreadcrumbItem>
                     </Breadcrumb>
-                    <Content :style="{padding: '24px', background: '#fff'}" >
+                    <Content :style="{position : 'relative', padding: '24px', background: '#fff'}" >
                         <keep-alive>
                             <router-view @on-topSetPathNameAr="setPathNameAr" v-if="$route.path.indexOf('index') != -1" ></router-view>
                         </keep-alive>
@@ -74,21 +71,18 @@
                     '系统设置',
                     '管理员设置',
                     '列表'
-                ],
-                menuList : []
+                ]
             }
         },
         components : {
             CmMenu
         },
         created () {
-            // 菜单
-            this.$Cm.api('admin/menu/get_list').then(res => {
-                this.menuList = res.data
-            })
-
-            this.$on('test', function() {
-                console.log('run test')
+            // 用户信息
+            this.$Cm.api('admin/admin_user/info').then(res => {
+                res.run(false).then(() => {
+                    this.$store.commit("SetUserInfo", res.data)
+                })
             })
         },
         methods: {
@@ -111,10 +105,10 @@
                     case 'dropOutLogin' :
                             this.$Cm.dropOutLogin()
                         break;
+                    case 'setPassword' :
+                            this.$router.push('/main/set_password')
+                        break;
                 }
-            },
-            dropOutLogin () {
-                this.$Cm.dropOutLogin()
             }
         },
     }
