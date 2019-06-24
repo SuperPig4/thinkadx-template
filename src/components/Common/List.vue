@@ -5,17 +5,7 @@
 
 <template>
     <div>
-        <div class="action">
-            <Form  inline>
-                <FormItem prop="user">
-                    <Input search enter-button="Search" placeholder="Enter something..." />
-                </FormItem>
-                <FormItem>
-                    <Button type="primary">搜索</Button>
-                </FormItem>
-            </Form>
-        </div>
-        <Table height="200" border :columns="column" :data="data" ></Table>
+        <Table border :columns="column" :data="data" ></Table>
         <Page :current="1" style="text-align: center; margin-top:20px;" :total="total" simple />
     </div>
 </template>

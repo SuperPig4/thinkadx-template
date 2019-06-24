@@ -29,6 +29,10 @@ const router = new VueRouter({
                     component : resolve => require(['@/components/Admin/SetPassword'], resolve)
                 },
                 {
+                    path : 'admin_user_index',
+                    component : resolve => require(['@/components/Admin/Index'], resolve)
+                },
+                {
                     path : '',
                     component : resolve => require(['@/components/Menu/Index'], resolve)
                 }

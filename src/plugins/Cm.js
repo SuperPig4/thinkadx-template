@@ -34,7 +34,7 @@ export default {
         }
 
         // 全局过滤器
-        Vue.filter('formatData', (value) => {
+        let formatDate = (value) => {
             if(isNaN(value)) {
                 return ''
             } else {
@@ -52,9 +52,12 @@ export default {
                 s = s < 10 ? ('0' + s) : s;
                 return y + '-' + MM + '-' + d + ' ' + h + ':' + m + ':' + s;
             }
-        })
+        }
+
+        Vue.filter('formatDate', formatDate)
         
         Vue.prototype.$Cm = {
+            formatDate,
             test () {
                 console.log(router)
             },

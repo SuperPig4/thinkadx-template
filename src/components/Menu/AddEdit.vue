@@ -54,7 +54,7 @@
                     <Input disabled :value="submitData.father && submitData.father.title" placeholder="请输入标题"></Input>
                 </FormItem> -->
                 <FormItem label="创建时间" >
-                    <Input disabled :value="submitData.create_time|formatData" placeholder="请输入标题"></Input>
+                    <Input disabled :value="submitData.create_time|formatDate" placeholder="请输入标题"></Input>
                 </FormItem>
             </div>
 
@@ -94,7 +94,7 @@
             }
         },
         created() {
-            this.$emit('on-topSetPathNameAr', '编辑')
+            this.$emit('on-topSetPathNameAr', ['系统设置','菜单管理','列表','编辑'])
             this.setRule().then(() => {
                 if(this.$route.params.id) {
                     this.id = this.$route.params.id

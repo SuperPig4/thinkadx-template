@@ -37,4 +37,5 @@ export default {
 
 .G-form{ margin-top:20px; width:400px; position: relative; }
 .G-form .ivu-form-item-label{ width:130px !important }
+
 </style>
