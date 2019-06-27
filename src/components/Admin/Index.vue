@@ -1,13 +1,19 @@
 <template>
     <div>
         <Spin size="large" fix v-show="isShowLoading" ></Spin>
-        <div class="action">
+        <div>
             <Form inline>
+                <FormItem>
+                    <Button @click="add_edit()" icon="md-add-circle" type="primary">增加</Button>
+                </FormItem>
+                <FormItem>
+                    <Button icon="md-trash" type="error">批量删除</Button>
+                </FormItem>
                 <FormItem>
                     <Input v-model="searchText" placeholder="用户ID或昵称" />
                 </FormItem>
                 <FormItem>
-                    <Button @click="search" type="primary">搜索</Button>
+                    <Button @click="search" type="info">搜索</Button>
                 </FormItem>
             </Form>
         </div>
@@ -26,16 +32,23 @@
                         align: 'center',
                         width: 50,
                         fixed: 'left',
-                    },{
+                    },
+                    {
                         title: 'id',
                         key: 'id',
                         width: 80,
                         align: 'center',
                         fixed: 'left'
-                    },{
+                    },
+                    {
                         title : '昵称',
                         key : 'nickname',
-                    },{
+                    },
+                    {
+                        title : '状态',
+                        key : 'status_text',
+                    },
+                    {
                         title : '创建时间',
                         key : 'create_time',
                         render: (h, params) => {
@@ -44,7 +57,8 @@
                                 this.$Cm.formatDate(params.row.create_time)
                             );
                         }
-                    },{
+                    },
+                    {
                         title: '操作',
                         fixed: 'right',
                         width: 200,
@@ -52,7 +66,9 @@
                             return h('div', [
                                 h('Button', {
                                     on: {
-                                        click: (e) => {console.log(params)},
+                                        click: (e) => {
+                                            this.add_edit(params.row.id)
+                                        },
                                     },
                                     props: {
                                         icon : 'ios-create',
@@ -86,7 +102,13 @@
                 })
             })
         },
+        activated () {
+            this.$emit('on-topSetPathNameAr', ['系统设置','管理员管理','列表'])
+        },
         methods: {
+            add_edit (id = '') {
+                this.$router.push('/main/admin_user_add_edit/' + id)
+            },
             search () {
                 this.list = []
                 this.getData()

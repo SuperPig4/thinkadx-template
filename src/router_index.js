@@ -33,6 +33,10 @@ const router = new VueRouter({
                     component : resolve => require(['@/components/Admin/Index'], resolve)
                 },
                 {
+                    path : 'admin_user_add_edit/:id?',
+                    component : resolve => require(['@/components/Admin/AddEdit'], resolve)
+                },
+                {
                     path : '',
                     component : resolve => require(['@/components/Menu/Index'], resolve)
                 }

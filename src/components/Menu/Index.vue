@@ -3,9 +3,9 @@
 </style>
 
 <template>
-    <div class="G-page" >
+    <div>
         <Spin size="large" fix v-show="isShowLoading" ></Spin>
-        <div class="action">
+        <div>
             <Button @click="jumpAddEdit()" icon="md-add-circle" type="primary">
                 增加顶级
             </Button>
