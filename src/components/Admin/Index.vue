@@ -17,7 +17,7 @@
                 </FormItem>
             </Form>
         </div>
-        <Cm-List :column="column" :data="list" />
+        <Cm-List @on-page-change="getData"  :column="column" :data="list" :total="count" />
     </div>
 </template>
 <script>
@@ -113,9 +113,10 @@
                 this.list = []
                 this.getData()
             },
-            getData () {
+            getData (p = 1) {
                 this.isShowLoading = true
                 this.$Cm.api('admin/admin_user/index', {
+                    p : p,
                     search : this.searchText
                 }).then(res => {
                     this.list = res.data

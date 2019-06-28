@@ -6,7 +6,7 @@
 <template>
     <div>
         <Table border :columns="column" :data="data" ></Table>
-        <Page :current="1" style="text-align: center; margin-top:20px;" :total="total" simple />
+        <Page @on-change="pageChange" :current="1" style="text-align: center; margin-top:20px;" :total="total" :page-size="25" simple />
     </div>
 </template>
 
@@ -144,6 +144,11 @@
                     }
                 ]
             }
-        }
+        },
+        methods: {
+            pageChange(e) {
+                this.$emit('on-page-change', e);
+            }
+        },
     }
 </script>
