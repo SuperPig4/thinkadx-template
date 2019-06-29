@@ -6,7 +6,7 @@
 <template>
     <div>
         <Table border :columns="column" :data="data" ></Table>
-        <Page @on-change="pageChange" :current="1" style="text-align: center; margin-top:20px;" :total="total" :page-size="25" simple />
+        <Page @on-change="pageChange" :current="page" style="text-align: center; margin-top:20px;" :total="total" :page-size="25" simple />
     </div>
 </template>
 
@@ -15,7 +15,8 @@
         props : {
             column : Array,
             data : Array,
-            total : Number
+            total : Number,
+            page : Number
         },
         data () {
             return {

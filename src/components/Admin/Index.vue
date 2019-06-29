@@ -17,7 +17,7 @@
                 </FormItem>
             </Form>
         </div>
-        <Cm-List @on-page-change="getData"  :column="column" :data="list" :total="count" />
+        <Cm-List @on-page-change="pageChange" :page="page" :column="column" :data="list" :total="count" />
     </div>
 </template>
 <script>
@@ -26,6 +26,9 @@
             return {
                 isShowLoading : true,
                 count : 0,
+                page : 0,
+                list : [],
+                searchText : '',
                 column : [
                     {
                         type: 'selection',
@@ -66,7 +69,7 @@
                             return h('div', [
                                 h('Button', {
                                     on: {
-                                        click: (e) => {
+                                        click : (e) => {
                                             this.add_edit(params.row.id)
                                         },
                                     },
@@ -78,6 +81,11 @@
                                     style : 'margin-right:10px;'
                                 }, '编辑'),
                                 h('Button', {
+                                    on : {
+                                        click : () => {
+                                            this.delete(params.row.id)
+                                        }
+                                    },
                                     props: {
                                         icon : 'md-trash',
                                         type: 'error',
@@ -87,40 +95,81 @@
                             ]);
                         }
                     }
-                ],
-                list : [],
-                searchText : ''
+                ]
             }
         },  
         created() {
-            this.$Cm.api('admin/admin_user/index', {
-                count : 1
-            }).then(countRes => {
-                countRes.run(false).then(() => {
-                    this.count = countRes.data
-                    this.getData()
-                })
+            this.getCount().then(() => {
+                this.page++
             })
         },
         activated () {
             this.$emit('on-topSetPathNameAr', ['系统设置','管理员管理','列表'])
         },
+        watch : {
+            page (value) {
+                if(value == 0) {
+                    this.list = []
+                    this.getCount().then(() => {
+                        this.page++
+                    })
+                } else {
+                    this.getData()
+                }
+            }
+        },
         methods: {
+            // 删除
+            delete (id) {
+                this.$Cm.api('admin/admin_user/delete',{
+                    id : id
+                }).then(res => {
+                    res.run().then(() => {
+                        this.getData()
+                    })
+                })
+            },
+            // 跳转至编辑、新增页面
             add_edit (id = '') {
                 this.$router.push('/main/admin_user_add_edit/' + id)
             },
+            // 搜索提交
             search () {
-                this.list = []
-                this.getData()
+                this.page = 0
             },
-            getData (p = 1) {
+            // list组建的page变动
+            pageChange (e) {
+                this.page = e
+            },
+            // 请求数据
+            getData () {
                 this.isShowLoading = true
                 this.$Cm.api('admin/admin_user/index', {
-                    p : p,
+                    p : this.page,
                     search : this.searchText
                 }).then(res => {
-                    this.list = res.data
-                    this.isShowLoading = false
+                    res.run(false).then(() => {
+                        if(res.data.length <= 0) {
+                            this.getCount().then(() => {
+                                this.page--
+                            })
+                        } else {
+                            this.list = res.data
+                            this.isShowLoading = false
+                        }
+                    })
+                    
+                })
+            },
+            // 获得统计
+            getCount () {
+                return this.$Cm.api('admin/admin_user/index', {
+                    count : 1,
+                    search : this.searchText
+                }).then(res => {
+                    res.run(false).then(() => {
+                        this.count = res.data
+                    })
                 })
             }
         },
