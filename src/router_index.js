@@ -36,6 +36,15 @@ const router = new VueRouter({
                     path : 'admin_user_add_edit/:id?',
                     component : resolve => require(['@/components/Admin/AddEdit'], resolve)
                 },
+                //管理员分组
+                {
+                    path : 'admin_group_index',
+                    component : resolve => require(['@/components/AdminGroup/Index'], resolve)
+                },
+                {
+                    path : 'admin_group_add_edit/:id?',
+                    component : resolve => require(['@/components/AdminGroup/AddEdit'], resolve)
+                },
                 {
                     path : '',
                     component : resolve => require(['@/components/Menu/Index'], resolve)

@@ -5,7 +5,7 @@
 
 <template>
     <div>
-        <Table border :columns="column" :data="data" ></Table>
+        <Table ref="table" border :columns="column" :data="data" ></Table>
         <Page @on-change="pageChange" :current="page" style="text-align: center; margin-top:20px;" :total="total" :page-size="25" simple />
     </div>
 </template>
@@ -147,6 +147,10 @@
             }
         },
         methods: {
+            // getTable () {
+                // console.log(this.$refs.table.getSelection())
+                // return this.$refs.tableRef
+            // },
             pageChange(e) {
                 this.$emit('on-page-change', e);
             }

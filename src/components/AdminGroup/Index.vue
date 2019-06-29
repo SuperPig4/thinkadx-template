@@ -10,7 +10,7 @@
                     <Button @click="del()" icon="md-trash" type="error">批量删除</Button>
                 </FormItem>
                 <FormItem>
-                    <Input v-model="searchText" placeholder="用户ID或昵称" />
+                    <Input v-model="searchText" placeholder="ID或分组名" />
                 </FormItem>
                 <FormItem>
                     <Button @click="search" type="info">搜索</Button>
@@ -44,8 +44,8 @@
                         fixed: 'left'
                     },
                     {
-                        title : '昵称',
-                        key : 'nickname',
+                        title : '分组名',
+                        key : 'name',
                     },
                     {
                         title : '状态',
@@ -104,7 +104,7 @@
             })
         },
         activated () {
-            this.$emit('on-topSetPathNameAr', ['系统设置','管理员管理','列表'])
+            this.$emit('on-topSetPathNameAr', ['系统设置','管理员分组','列表'])
         },
         watch : {
             page (value) {
@@ -134,14 +134,14 @@
                         return false;
                     }
                     
+                    id = []
                     for(let i in data) {
-                        temp.push(data[i].id)
+                        id.push(data[i].id)
                     }
-                    id = JSON.stringify(temp)
                 }
 
-                this.$Cm.api('admin/admin_user/delete',{
-                    delete_id : id
+                this.$Cm.api('admin/admin_group/delete',{
+                    id : id
                 }).then(res => {
                     res.run().then(() => {
                         this.getData()
@@ -151,7 +151,7 @@
             },
             // 跳转至编辑、新增页面
             add_edit (id = '') {
-                this.$router.push('/main/admin_user_add_edit/' + id)
+                this.$router.push('/main/admin_group_add_edit/' + id)
             },
             // 搜索提交
             search () {
@@ -164,11 +164,12 @@
             // 请求数据
             getData () {
                 this.isShowLoading = true
-                this.$Cm.api('admin/admin_user/index', {
+                this.$Cm.api('admin/admin_group/index', {
                     p : this.page,
                     search : this.searchText
                 }).then(res => {
                     res.run(false).then(() => {
+
                         if(res.data.length <= 0) {
                             this.getCount().then(() => {
                                 this.page--
@@ -183,7 +184,7 @@
             },
             // 获得统计
             getCount () {
-                return this.$Cm.api('admin/admin_user/index', {
+                return this.$Cm.api('admin/admin_group/index', {
                     count : 1,
                     search : this.searchText
                 }).then(res => {

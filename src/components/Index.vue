@@ -51,9 +51,9 @@
                     </Breadcrumb>
                     <Content :style="{position : 'relative', padding: '24px', background: '#fff'}" >
                         <keep-alive>
-                            <router-view @on-topSetPathNameAr="setPathNameAr" v-if="$route.path.indexOf('index') != -1" ></router-view>
+                            <router-view ref="routerView" @on-topSetPathNameAr="setPathNameAr" v-if="$route.path.indexOf('index') != -1" ></router-view>
                         </keep-alive>
-                        <router-view @on-topSetPathNameAr="setPathNameAr" v-if="$route.path.indexOf('index') == -1" ></router-view>
+                        <router-view ref="routerView" @on-topSetPathNameAr="setPathNameAr" v-if="$route.path.indexOf('index') == -1" ></router-view>
                     </Content>
                 </Layout>
             </Layout>
@@ -98,7 +98,9 @@
                 }
             },
             refreshAct () {
-                location.reload() 
+                if(this.$refs.routerView.refresh) {
+                    this.$refs.routerView.refresh()
+                }
             },
             userDropdownEv (name) {
                 switch(name) {

@@ -92,6 +92,10 @@ export default {
                         for(let i in cloneData) {
                             cloneData[i] == null && (cloneData[i] = '')
                             let item = cloneData[i]
+                            // 判断是否为数组
+                            if(item instanceof Array) {
+                                item = JSON.stringify(item)
+                            }
                             paramsAr.push(i + '=' + encodeURIComponent(item).replace(/[!'()*]/g, function(c) {
                                 return '%' + c.charCodeAt(0).toString(16).toUpperCase();
                             }).replace(/%20/g, function(c) {
