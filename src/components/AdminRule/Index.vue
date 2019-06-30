@@ -10,7 +10,7 @@
                     <Button @click="del()" icon="md-trash" type="error">批量删除</Button>
                 </FormItem>
                 <FormItem>
-                    <Input v-model="searchText" placeholder="ID或分组名" />
+                    <Input v-model="searchText" placeholder="ID或描述" />
                 </FormItem>
                 <FormItem>
                     <Button @click="search" type="info">搜索</Button>
@@ -44,12 +44,8 @@
                         fixed: 'left'
                     },
                     {
-                        title : '分组名',
-                        key : 'name',
-                    },
-                    {
-                        title : '状态',
-                        key : 'status_text',
+                        title : '描述',
+                        key : 'des',
                     },
                     {
                         title : '创建时间',
@@ -104,7 +100,7 @@
             })
         },
         activated () {
-            this.$emit('on-topSetPathNameAr', ['系统设置','管理员分组','列表'])
+            this.$emit('on-topSetPathNameAr', ['系统设置','分组规则','列表'])
         },
         watch : {
             page (value) {
@@ -149,7 +145,7 @@
                         }
 
                         this.isShowLoading = true
-                        this.$Cm.api('admin/admin_group/delete',{
+                        this.$Cm.api('admin/admin_rule/delete',{
                             id : id
                         }).then(res => {
                             res.run(false).then(() => {
@@ -166,7 +162,7 @@
             },
             // 跳转至编辑、新增页面
             add_edit (id = '') {
-                this.$router.push('/main/admin_group_add_edit/' + id)
+                this.$router.push('/main/admin_rule_add_edit/' + id)
             },
             // 搜索提交
             search () {
@@ -179,7 +175,7 @@
             // 请求数据
             getData () {
                 this.isShowLoading = true
-                this.$Cm.api('admin/admin_group/index', {
+                this.$Cm.api('admin/admin_rule/index', {
                     p : this.page,
                     search : this.searchText
                 }).then(res => {
@@ -198,7 +194,7 @@
             },
             // 获得统计
             getCount () {
-                return this.$Cm.api('admin/admin_group/index', {
+                return this.$Cm.api('admin/admin_rule/index', {
                     count : 1,
                     search : this.searchText
                 }).then(res => {

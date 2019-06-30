@@ -1,10 +1,3 @@
-<style>
-    .img-upload{position: relative;width:60px; height:60px;border-radius: 5px;overflow: hidden;}
-    .img-upload img{ width:100%; height:100%;}
-    .img-upload:hover .make-action{display:flex;}
-    .img-upload .make-action{display: none;justify-content: center;align-items: center;position:absolute;top:0px;left:0px;width:60px;height:60px;border-radius: 5px;background:rgba(0,0,0,0.6);}
-    .img-upload .make-action i{color:#fff;font-size:23px;cursor: pointer;margin: 0 2px;}
-</style>
 <template>
     <div>
         <Spin size="large" fix v-show="isShowLoading" ></Spin>
@@ -97,7 +90,8 @@
                         res.data.status = Boolean(res.data.status)
                         this.submitData = res.data
                     })
-                    this.isShowLoading = false
+                }).finally(() => {
+                    this.isShowLoading =  false
                 })
             }
         },

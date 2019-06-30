@@ -142,7 +142,8 @@
                             res.data.status = Boolean(res.data.status)
                             this.submitData = res.data
                         })
-                        this.isShowLoading = false
+                    }).finally(() => {
+                        this.isShowLoading =  false
                     })
                 }
             })

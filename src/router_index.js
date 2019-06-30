@@ -36,7 +36,7 @@ const router = new VueRouter({
                     path : 'admin_user_add_edit/:id?',
                     component : resolve => require(['@/components/Admin/AddEdit'], resolve)
                 },
-                //管理员分组
+                // 管理员分组
                 {
                     path : 'admin_group_index',
                     component : resolve => require(['@/components/AdminGroup/Index'], resolve)
@@ -44,6 +44,15 @@ const router = new VueRouter({
                 {
                     path : 'admin_group_add_edit/:id?',
                     component : resolve => require(['@/components/AdminGroup/AddEdit'], resolve)
+                },
+                // 管理员分组规则
+                {
+                    path : 'admin_rule_index',
+                    component : resolve => require(['@/components/AdminRule/Index'], resolve)
+                },
+                {
+                    path : 'admin_rule_add_edit/:id?',
+                    component : resolve => require(['@/components/AdminRule/AddEdit'], resolve)
                 },
                 {
                     path : '',

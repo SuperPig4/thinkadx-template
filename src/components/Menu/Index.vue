@@ -67,7 +67,7 @@ export default {
                             this.$Modal.confirm({
                                 loading: true,
                                 title: '提示',
-                                content: '数据删除后将不能恢复,是否确定删除?',
+                                content: '数据删除后将无法恢复,是否确定删除?',
                                 cancelText: '取消',
                                 okText: '确定',
                                 onOk () {
@@ -84,7 +84,7 @@ export default {
                                         this.$Modal.remove();
                                     })
                                 }
-                            });
+                            })
                         }
                     }
                 })
