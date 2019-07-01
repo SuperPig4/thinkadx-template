@@ -54,6 +54,15 @@ const router = new VueRouter({
                     path : 'admin_rule_add_edit/:id?',
                     component : resolve => require(['@/components/AdminRule/AddEdit'], resolve)
                 },
+                // 配置文件
+                {
+                    path : 'config_index',
+                    component : resolve => require(['@/components/Config/Index'], resolve)
+                },
+                {
+                    path : 'config_add_edit/:id?',
+                    component : resolve => require(['@/components/Config/AddEditx'], resolve)
+                },
                 {
                     path : '',
                     component : resolve => require(['@/components/Menu/Index'], resolve)
