@@ -1,29 +1,22 @@
-# pc
+Thinkadx-template
+===============
 
-## Project setup
-```
-npm install
-```
+## 使用git安装
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+~~~
+1、git clone https://gitee.com/first_pig/thinkadx-template.git
 
-### Compiles and minifies for production
-```
-npm run build
-```
+安装所有依赖
+2、npm install
 
-### Run your tests
-```
-npm run test
-```
+3、打开 src/plugins/Cm.js 将 Config.apiDomain 的接口域名换成你搭建的thinkadx服务器端地址
 
-### Lints and fixes files
-```
-npm run lint
-```
+启动vue3的ui界面
+4、vue ui
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+5、点击任务->serve->启动->启动APP
+
+6、默认账号密码 admin admin
+~~~
+
+
