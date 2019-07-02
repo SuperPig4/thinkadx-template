@@ -15,7 +15,9 @@ const state = new Vuex.Store({
         // 刷新令牌
         refresh_token : {},
         // 用户信息
-        user_info : {}
+        user_info : {},
+        // 配置信息
+        system_config : {}
     },
     getters : {
         getToken : (state) => (type) => {
@@ -44,6 +46,10 @@ const state = new Vuex.Store({
         // 置入用户信息
         SetUserInfo (state, value) {
             state.user_info = value
+        },
+        // 置入配置信息
+        SetSystemConfig (state, value) {
+            state.system_config = value
         } 
     }
 })

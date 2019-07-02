@@ -8,8 +8,8 @@
     .Sider a{ text-align: left; padding-left:60px !important;}
     .ivu-menu-submenu-title{ padding-left:30px !important; text-align: left !important;}
     .ivu-menu-item{padding-left:20px !important;}
-    .refresh{ position:absolute; top:80px; right:40px; z-index:1001; }
-    .jumpmain{ position:absolute; top:80px; right:80px; z-index:1001; }
+    .refresh{ position:absolute; top:80px; right:40px; z-index:800; }
+    .jumpmain{ position:absolute; top:80px; right:80px; z-index:800; }
     .menu-icon{ width:14px; height:14px; position: relative; top:2px; }
 </style>
 <template>
@@ -18,13 +18,18 @@
             <Header>
                 <Menu mode="horizontal" theme="dark">
                     <div class="layout-logo">
-                        后台管理系统
+                        {{$store.state.system_config.admin_system_name}}
                     </div>
                     <div class="layout-nav" >
                         <MenuItem name="1">
                             <Dropdown @on-click="userDropdownEv" >
                                 <a href="javascript:void(0)">
-                                    <Avatar :src="$store.state.user_info.avatar.url" />
+                                    <Avatar v-if="$store.state.user_info.avatar" :src="$store.state.user_info.avatar.url" />
+                                    <Avatar v-else >
+                                        <template v-if="!$store.state.user_info.avatar">
+                                            User
+                                        </template>
+                                    </Avatar>
                                     <Icon :style="{marginLeft:'10px', color:'#fff'}" type="ios-arrow-down"></Icon>
                                 </a>
                                 <DropdownMenu slot="list">
@@ -66,9 +71,7 @@
             return {
                 // 路径名
                 pathNameAr : [
-                    '系统设置',
-                    '管理员设置',
-                    '列表'
+                    'Loading'
                 ]
             }
         },
@@ -82,8 +85,23 @@
                     this.$store.commit("SetUserInfo", res.data)
                 })
             })
+
+            // 最新的配置信息
+            this.$Cm.api('admin/config/get_system_config').then(res => {
+                res.run(false).then(() => {
+                    this.$store.commit('SetSystemConfig', res.data)
+                })
+            })
         },
         methods: {
+            getAvatar() {
+                if(this.$store.state.user_info.avatar) {
+                    return this.$store.state.user_info.avatar.url
+                } else {
+                    return ''
+                }
+                
+            },
             /**
              * 修改路径名
              * @param string/array 如果是数组则直接覆盖/否则只是push
