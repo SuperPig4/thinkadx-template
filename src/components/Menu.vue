@@ -1,5 +1,5 @@
 <style>
-.menu-icon{ width:14px; height:14px; position: relative; top:2px; }
+    .menu-icon{ width:14px; height:14px; position: relative; top:2px; }
 </style>
 <template>
     <div >

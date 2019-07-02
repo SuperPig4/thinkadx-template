@@ -70,7 +70,7 @@ const router = new VueRouter({
                 },
                 {
                     path : '',
-                    component : resolve => require(['@/components/Menu/Index'], resolve)
+                    component : resolve => require(['@/components/Main'], resolve)
                 }
             ]
         }

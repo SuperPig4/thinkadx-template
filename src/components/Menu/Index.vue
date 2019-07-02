@@ -30,6 +30,10 @@ export default {
         this.$emit('on-topSetPathNameAr', ['系统设置','菜单管理','列表'])
     },
     methods: {
+        refresh () {
+            this.list = []
+            this.getListData()
+        },
         getListData () {
             this.$Cm.api('admin/menu/index').then(res => {
                 let newList = []
