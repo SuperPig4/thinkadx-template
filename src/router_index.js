@@ -63,6 +63,11 @@ const router = new VueRouter({
                     path : 'config_add_edit/:id?',
                     component : resolve => require(['@/components/Config/AddEditx'], resolve)
                 },
+                // 管理员操作日志
+                {
+                    path : 'admin_log_index',
+                    component : resolve => require(['@/components/AdminLog/Index'], resolve)
+                },
                 {
                     path : '',
                     component : resolve => require(['@/components/Menu/Index'], resolve)

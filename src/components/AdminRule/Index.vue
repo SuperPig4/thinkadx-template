@@ -46,6 +46,7 @@
                     {
                         title : '描述',
                         key : 'des',
+                        ellipsis : true
                     },
                     {
                         title : '创建时间',
