@@ -100,6 +100,8 @@ export default {
                                 return '%' + c.charCodeAt(0).toString(16).toUpperCase();
                             }).replace(/%20/g, function(c) {
                                 return '+'
+                            }).replace(/%2B/g, function(c) {
+                                return '+'
                             }))
                         }   
                         console.log(paramsAr.sort().join('&'))
