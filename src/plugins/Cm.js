@@ -144,13 +144,18 @@ export default {
                                     case -1001 :
                                             RefreshTokenLogic().then(res => {
                                                 Vue.prototype.$Cm.api(url, data, defaultHeader, isUseToken, false).then(res => {
-                                                    resolve(res)
+                                                    res.run(false, false).then(() => {
+                                                        resolve(res)
+                                                    }).catch((e) => {
+                                                        Vue.prototype.$Cm.dropOutLogin()
+                                                    })
                                                 }).catch((e) => {
                                                     reject()
                                                 })
                                             })
                                         break;
                                     case -1002 :
+                                            reject()
                                             iview.Modal.error({
                                                 title:'您的账号在其他地方登陆',
                                                 content:2,
@@ -160,6 +165,7 @@ export default {
                                             })
                                         break;
                                     default :
+                                            reject()
                                             Vue.prototype.$Cm.dropOutLogin()
                                         break;
                                 }
