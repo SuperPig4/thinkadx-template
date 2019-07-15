@@ -39,6 +39,10 @@
     export default {
         data () {
             return {
+                // 系统配置
+                SystemConfig : {
+                    pathNameAr : '编辑'
+                },
                 id : 0,
                 isShowLoading : false,
                 submitData : {
@@ -47,7 +51,6 @@
                     type : '',
                     description : ''
                 },
-                ruleList : [],
                 ruleValidate : {
                     name : [
                         {required : true, message: '请输入配置名', trigger: 'blur' }
@@ -65,9 +68,7 @@
             }
         },
         created() {
-            this.$emit('on-topSetPathNameAr', ['系统设置','系统配置','列表','编辑'])
             this.$route.params.id && (this.id = this.$route.params.id)
-            
             if(this.id) {
                 this.isShowLoading = true
                 this.$Cm.api('admin/config/detail',{

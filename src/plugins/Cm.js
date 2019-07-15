@@ -53,9 +53,44 @@ export default {
                 return y + '-' + MM + '-' + d + ' ' + h + ':' + m + ':' + s;
             }
         }
-
         Vue.filter('formatDate', formatDate)
         
+        // 全局混入
+        let SystemConfigLogic = function(params, useFunName) {
+            this.$nextTick(function () {
+                if(params) {
+                    
+                    let Config = Object.assign({
+                        // refresh 方法名 可以自定义
+                        // refreshFunName : 'refresh', 
+                        // 执行created的时候是否自动调用一次 refresh 方法
+                        // isAuthCallOnceRefresh : true
+                    }, (params || {}))
+
+                    // 路径逻辑
+                    if(Config.pathNameAr) {
+                        this.$emit('on-topSetPathNameAr', Config.pathNameAr)
+                    }
+        
+                    // refresh 逻辑
+                    // if(Config.isAuthCallOnceRefresh === true && useFunName == 'mounted') {
+                    //     if(this[Config.refreshFunName]) {
+                    //         this[Config.refreshFunName]()
+                    //     }
+                    // }
+                }      
+            })
+        }
+        Vue.mixin({
+            mounted () {
+                SystemConfigLogic.call(this, this.SystemConfig, 'mounted')
+            },
+            activated () {
+                
+                SystemConfigLogic.call(this, this.SystemConfig, 'activated')
+            }
+        })
+
         Vue.prototype.$Cm = {
             formatDate,
             test () {

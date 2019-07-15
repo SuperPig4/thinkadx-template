@@ -33,13 +33,20 @@
     export default {
         data () {
             return {
+                // 系统配置
+                SystemConfig : {
+                    pathNameAr : '编辑'
+                },
+                // 数据id
                 id : 0,
+                // 加载状态
                 isShowLoading : false,
+                // 提交数据
                 submitData : {
                     des : '',
                     rule : ''
                 },
-                ruleList : [],
+                // 表单验证规则
                 ruleValidate : {
                     des : [
                         {required : true, message: '请输入描述', trigger: 'blur' }
@@ -48,23 +55,25 @@
             }
         },
         created() {
-            this.$emit('on-topSetPathNameAr', ['管理员管理','分组规则','列表','编辑'])
             this.$route.params.id && (this.id = this.$route.params.id)
-            
-            if(this.id) {
-                this.isShowLoading = true
-                this.$Cm.api('admin/admin_rule/detail',{
-                    id : this.id
-                }).then(res => {
-                    res.run(false).then(() => {
-                        this.submitData = res.data
-                    })
-                }).finally(() => {
-                    this.isShowLoading =  false
-                })
-            }
+            this.refresh()
         },
         methods : {
+            // 刷新
+            refresh () {
+                if(this.id) {
+                    this.isShowLoading = true
+                    this.$Cm.api('admin/admin_rule/detail',{
+                        id : this.id
+                    }).then(res => {
+                        res.run(false).then(() => {
+                            this.submitData = res.data
+                        })
+                    }).finally(() => {
+                        this.isShowLoading =  false
+                    })
+                }
+            },
             submit () {
                 this.$refs['formValidate'].validate(valiRes => {
                     if(valiRes) {

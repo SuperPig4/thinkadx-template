@@ -108,7 +108,7 @@
              */
             setPathNameAr (age) {
                 if(age instanceof Array) {
-                    this.pathNameAr = age
+                    this.pathNameAr = age.concat()
                 } else {
                     this.pathNameAr.push(age)
                 }

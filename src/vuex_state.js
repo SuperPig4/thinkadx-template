@@ -1,14 +1,26 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import createPersistedState from "vuex-persistedstate"
+import * as Cookies from 'js-cookie'
 
 Vue.use(Vuex)
 
 const state = new Vuex.Store({
     // plugins: [createPersistedState()],
-    plugins: [createPersistedState({
-        storage: window.sessionStorage
-    })],
+    // plugins: [createPersistedState({
+    //     storage: window.sessionStorage
+    // })],
+    plugins : [
+        createPersistedState({
+            storage: {
+                getItem: key => JSON.parse(Cookies.get(key)),
+                setItem: (key, value) => {
+                    Cookies.set(key, JSON.stringify(value))
+                },
+                removeItem: key => Cookies.remove(key)
+            }
+        })
+    ],
     state : {
         // 访问令牌
         access_token : {},

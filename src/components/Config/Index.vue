@@ -1,31 +1,31 @@
 <template>
     <div>
-        <Spin size="large" fix v-show="isShowLoading" ></Spin>
-        <div>
-            <Form inline>
+        <Cm-List 
+            ref="CmList"
+            :controller="listConfig.controller"
+            :searchPlaceholder="listConfig.searchPlaceholder"
+            :column="column">
+            <template v-slot:search-button>
                 <FormItem>
                     <Button @click="add_edit()" icon="md-add-circle" type="primary">增加</Button>
                 </FormItem>
-                <FormItem>
-                    <Input v-model="searchText" placeholder="ID或名称" />
-                </FormItem>
-                <FormItem>
-                    <Button @click="search" type="info">搜索</Button>
-                </FormItem>
-            </Form>
-        </div>
-        <Cm-List ref="CmList" @on-page-change="pageChange" :page="page" :column="column" :data="list" :total="count" />
+            </template>
+        </Cm-List>
     </div>
 </template>
 <script>
     export default {
         data () {
             return {
-                isShowLoading : true,
-                count : 0,
-                page : 0,
-                list : [],
-                searchText : '',
+                // 系统配置
+                SystemConfig : {
+                    pathNameAr : ['系统设置','系统配置','列表']
+                },
+                // 列表组件配置参数
+                listConfig : {
+                    controller : 'config',
+                    searchPlaceholder : 'ID或名称'
+                },
                 column : [
                     {
                         type: 'selection',
@@ -77,77 +77,15 @@
                 ]
             }
         },  
-        created() {
-            this.getCount().then(() => {
-                this.page++
-            })
-        },
-        activated () {
-            this.$emit('on-topSetPathNameAr', ['系统设置','系统配置','列表'])
-        },
-        watch : {
-            page (value) {
-                if(value == 0) {
-                    this.isShowLoading = true
-                    this.list = []
-                    this.getCount().then(() => {
-                        this.page++
-                    })
-                } else {
-                    this.getData()
-                }
-            }
-        },
         methods: {
             // 刷新
             refresh () {
-                this.searchText = ''
-                this.page = 0
+                this.$refs.CmList.refresh()
             },
             // 跳转至编辑、新增页面
             add_edit (id = '') {
                 this.$router.push('/main/config_add_edit/' + id)
             },
-            // 搜索提交
-            search () {
-                this.page = 0
-            },
-            // list组建的page变动
-            pageChange (e) {
-                this.page = e
-            },
-            // 请求数据
-            getData () {
-                this.isShowLoading = true
-                this.$Cm.api('admin/config/index', {
-                    p : this.page,
-                    search : this.searchText
-                }).then(res => {
-                    res.run(false).then(() => {
-                        if(res.data.length <= 0) {
-                            this.getCount().then(() => {
-                                this.page--
-                            })
-                        } else {
-                            this.list = res.data
-                        }
-                        console.log(this.list)
-                    })
-                }).finally(() => {
-                    this.isShowLoading =  false
-                })
-            },
-            // 获得统计
-            getCount () {
-                return this.$Cm.api('admin/config/index', {
-                    count : 1,
-                    search : this.searchText
-                }).then(res => {
-                    res.run(false).then(() => {
-                        this.count = res.data
-                    })
-                })
-            }
         },
     }
 </script>

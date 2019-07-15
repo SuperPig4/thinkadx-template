@@ -1,10 +1,3 @@
-<style>
-    .img-upload{position: relative;width:60px; height:60px;border-radius: 5px;overflow: hidden;}
-    .img-upload img{ width:100%; height:100%;}
-    .img-upload:hover .make-action{display:flex;}
-    .img-upload .make-action{display: none;justify-content: center;align-items: center;position:absolute;top:0px;left:0px;width:60px;height:60px;border-radius: 5px;background:rgba(0,0,0,0.6);}
-    .img-upload .make-action i{color:#fff;font-size:23px;cursor: pointer;margin: 0 2px;}
-</style>
 <template>
     <div>
         <Spin size="large" fix v-show="isShowLoading" ></Spin>
@@ -13,25 +6,14 @@
                 <i-switch v-model="submitData.status" />
             </FormItem>
             <FormItem label="图标" prop="icon" v-if="$route.params.fid == 0" >
-                <Upload 
-                    v-show="!submitData.icon"
-                    name="image"
-                    ref="upload" 
-                    :show-upload-list="true" 
-                    :on-success="uploadSuccess" 
-                    :before-upload="uploadBefore" 
-                    :data="otherData" 
-                    :headers="headers" 
-                    :action="$root.iviewConfig.uploadUrl">
-                    <Button icon="ios-cloud-upload-outline">上传</Button>
-                </Upload>
-                <div v-show="submitData.icon" class="img-upload">
-                    <img :src="submitData.icon" ></img>
-                    <div class="make-action">
-                        <Icon type="ios-eye-outline" @click="openImg" ></Icon>
-                        <Icon type="ios-trash-outline" @click="delUploadImg" ></Icon>
-                    </div>
-                </div>
+                <Cm-Upload
+                    path="menu_icon"
+                    :image="submitData.icon"
+                    @on-success="uploadSuccess"
+                    @on-error="uploadError"
+                    @on-delete="uploadDelete"
+                    >
+                </Cm-Upload>
             </FormItem>
             <FormItem label="标题" prop="title" >
                 <Input v-model="submitData.title" placeholder="请输入标题"></Input>
@@ -71,12 +53,12 @@
     export default {
         data () {
             return {
+                // 系统配置
+                SystemConfig : {
+                    pathNameAr : '编辑'
+                },
                 id : 0,
                 isShowLoading : true,
-                headers : {},
-                otherData : {
-                    path : 'menu_icon'
-                },
                 submitData : {
                     icon : '',
                     title : '',
@@ -94,19 +76,10 @@
             }
         },
         created() {
-            this.$emit('on-topSetPathNameAr', ['系统设置','菜单管理','列表','编辑'])
             this.setRule().then(() => {
                 if(this.$route.params.id) {
                     this.id = this.$route.params.id
-                    this.$Cm.api('admin/menu/detail',{
-                        id : this.$route.params.id
-                    }).then(res => {
-                        res.run(false)
-                        res.data.icon = res.data.icon.url
-                        res.data.status = Boolean(res.data.status)
-                        this.submitData = res.data
-                        this.isShowLoading = false
-                    })
+                    this.refresh()
                 } else {
                     this.isShowLoading = false
                 }
@@ -117,6 +90,23 @@
             })
         },
         methods : {
+            // 刷新
+            refresh () {
+                if(this.id) {
+                    this.isShowLoading =  true
+                    this.$Cm.api('admin/menu/detail',{
+                        id : this.$route.params.id
+                    }).then(res => {
+                        res.run(false).then(() => {
+                            res.data.icon = res.data.icon.url
+                            res.data.status = Boolean(res.data.status)
+                            this.submitData = res.data
+                        })
+                    }).finally(() => {
+                        this.isShowLoading =  false
+                    })
+                }
+            },
             // 根据fid决定验证规则
             setRule () {
                 return new Promise((resolve, reject) => {
@@ -164,28 +154,15 @@
                     }
                 })
             },
-            openImg () {
-                window.open(this.submitData.icon, '_blank')
+            uploadSuccess (res) {
+                this.submitData.icon = res.data.url
             },
-            uploadSuccess (e, file) {
-                let result = file.response
-                if(result.code) {
-                    this.submitData.icon = result.data.url
-                } else {
-                    this.$Message.error(result.msg)
-                }
+            uploadError (err) {
+                this.$Message.error(err)
             },
-            delUploadImg () {
+            uploadDelete () {
                 this.submitData.icon = ''
-                this.$refs.upload.clearFiles()
-            },
-            uploadBefore () {
-                return new Promise((resolve, reject) => {
-                    this.headers = new this.$Cm.getApiHeaderData(this.otherData, false)
-                    resolve()
-                })
-            },
-            
+            }
         }
     } 
 </script>

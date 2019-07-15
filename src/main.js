@@ -7,6 +7,7 @@ import store from './vuex_state'
 import iview from 'iview'
 import router from './router_index.js'
 import CommonListCom from './components/Common/List'
+import CommonUploadCom from './components/Common/Upload'
 
 import 'iview/dist/styles/iview.css'
 import './assets/css/init.css'
@@ -18,6 +19,7 @@ Vue.use(VueAxios,axios);
 Vue.use(iview)
 
 Vue.component('Cm-List', CommonListCom)
+Vue.component('Cm-Upload', CommonUploadCom)
 
 new Vue({
     data () {

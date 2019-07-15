@@ -17,17 +17,21 @@
 
 <script>
 export default {
+    configx : {
+        title : 'ces',
+    },
     data () {
         return {
+            // 系统配置
+            SystemConfig : {
+                pathNameAr : ['系统设置','菜单管理','列表']
+            },
             isShowLoading : true,
             list : []
         }
     },
-    created () {
-        this.getListData()
-    },
-    activated () {
-        this.$emit('on-topSetPathNameAr', ['系统设置','菜单管理','列表'])
+    created() {
+        this.refresh()
     },
     methods: {
         refresh () {
@@ -35,6 +39,7 @@ export default {
             this.getListData()
         },
         getListData () {
+            this.isShowLoading = true
             this.$Cm.api('admin/menu/index').then(res => {
                 let newList = []
                 for(var i in res.data) {
@@ -46,7 +51,9 @@ export default {
                     newList.push(item)
                 }
                 this.list = newList
-                this.isShowLoading = false
+                console.log(this.list)
+            }).finally(() => {
+                this.isShowLoading =  false
             })
         },
         getRender (h, { root, node, data }, isShowBut = true) {

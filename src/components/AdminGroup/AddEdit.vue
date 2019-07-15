@@ -14,7 +14,7 @@
                 <Input v-model="submitData.name" placeholder="请输分组名"></Input>
             </FormItem>
 
-            <FormItem label="权限规则" v-if="ruleList.length > 1" >
+            <FormItem label="权限规则">
                 <Transfer
                 filterable
                 :data="ruleList"
@@ -46,14 +46,23 @@
     export default {
         data () {
             return {
+                // 系统配置
+                SystemConfig : {
+                    pathNameAr : '编辑'
+                },
+                // 数据id
                 id : 0,
+                // 规则列表
+                ruleList : [],
+                // 加载状态
                 isShowLoading : false,
+                // 提交表单
                 submitData : {
                     name : '',
                     rules : [],
                     status : true
                 },
-                ruleList : [],
+                // 表单验证规则
                 ruleValidate : {
                     name : [
                         {required : true, message: '请输入分组名', trigger: 'blur' }
@@ -62,9 +71,7 @@
             }
         },
         created() {
-            this.$emit('on-topSetPathNameAr', ['管理员管理','管理员分组','列表','编辑'])
             this.$route.params.id && (this.id = this.$route.params.id)
-            
             this.$Cm.api('admin/admin_rule/index',{
                 all : 1
             }).then(res => {
@@ -79,23 +86,26 @@
                     this.ruleList = res.data
                 })
             })
-            
-            if(this.id) {
-                this.isShowLoading = true
-                this.$Cm.api('admin/admin_group/detail',{
-                    id : this.id
-                }).then(res => {
-                    res.run(false).then(() => {
-                        res.data.rules = res.data.rules.split(',')
-                        res.data.status = Boolean(res.data.status)
-                        this.submitData = res.data
-                    })
-                }).finally(() => {
-                    this.isShowLoading =  false
-                })
-            }
+            this.refresh()
         },
         methods : {
+            // 刷新
+            refresh () {
+                if(this.id) {
+                    this.isShowLoading = true
+                    this.$Cm.api('admin/admin_group/detail',{
+                        id : this.id
+                    }).then(res => {
+                        res.run(false).then(() => {
+                            res.data.rules = res.data.rules.split(',')
+                            res.data.status = Boolean(res.data.status)
+                            this.submitData = res.data
+                        })
+                    }).finally(() => {
+                        this.isShowLoading =  false
+                    })
+                }
+            },
             transferChange (newTargetKeys, direction, moveKeys) {
                 this.submitData.rules = newTargetKeys
             },

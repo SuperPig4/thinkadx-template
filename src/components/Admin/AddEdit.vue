@@ -18,26 +18,14 @@
             </FormItem>
 
             <FormItem label="图标" prop="avatar">
-                <Upload 
-                    v-show="!submitData.avatar"
-                    name="image"
-                    ref="upload" 
-                    :show-upload-list="true" 
-                    :on-success="uploadSuccess" 
-                    :before-upload="uploadBefore" 
-                    :data="uploadConfig.otherData" 
-                    :headers="uploadConfig.headers" 
-                    :action="$root.iviewConfig.uploadUrl">
-                    <Button icon="ios-cloud-upload-outline">上传</Button>
-                </Upload>
-
-                <div v-show="submitData.avatar" class="img-upload">
-                    <img :src="submitData.avatar" ></img>
-                    <div class="make-action">
-                        <Icon type="ios-eye-outline" @click="openImg" ></Icon>
-                        <Icon type="ios-trash-outline" @click="delUploadImg" ></Icon>
-                    </div>
-                </div>
+                <Cm-Upload
+                    path="menu_icon"
+                    :image="submitData.avatar"
+                    @on-success="uploadSuccess"
+                    @on-error="uploadError"
+                    @on-delete="uploadDelete"
+                    >
+                </Cm-Upload>
             </FormItem>
 
             <FormItem label="分组" prop="group_id" >
@@ -80,14 +68,17 @@
     export default {
         data () {
             return {
-                id : 0,
-                isShowLoading : false,
-                uploadConfig : {
-                    headers : {},
-                    otherData : {
-                        path : 'menu_icon'
-                    },
+                // 系统配置
+                SystemConfig : {
+                    pathNameAr : '编辑'
                 },
+                // 数据id
+                id : 0,
+                // 分组列表
+                groupList : [],
+                // 加载状态
+                isShowLoading : false,
+                // 提交数据
                 submitData : {
                     group_id : 0,
                     avatar : '',
@@ -96,7 +87,7 @@
                     add_data_password : '',
                     status : true
                 },
-                groupList : [],
+                // 表单验证规则
                 ruleValidate : {
                     nickname : [
                         {required : true, message: '请输入姓名', trigger: 'blur' }
@@ -104,25 +95,11 @@
                     group_id : [
                         {type:'number', required : true, message: '请选择分组', trigger: 'change' }
                     ],
-                    // avatar : [
-                    //     {
-                    //         required : true,
-                    //         validator (rule, value, callback, source, options) {
-                    //             if(!value) {
-                    //                 callback('请上传头像')
-                    //             } else {
-                    //                 callback();
-                    //             }
-                    //         }
-                    //     }
-                    // ],
                 }
             }
         },
         created() {
-            this.$emit('on-topSetPathNameAr', ['管理员管理','管理员列表','列表','编辑'])
             this.$route.params.id && (this.id = this.$route.params.id)
-            
             this.setRule().then(() => {
                 this.$Cm.api('admin/admin_group/index', {
                     all : 1
@@ -131,7 +108,12 @@
                         this.groupList = res.data
                     })
                 })
-
+                this.refresh()
+            })
+        },
+        methods : {
+            // 刷新
+            refresh () {
                 if(this.id) {
                     this.isShowLoading = true
                     this.$Cm.api('admin/admin_user/detail',{
@@ -146,11 +128,7 @@
                         this.isShowLoading =  false
                     })
                 }
-            })
-
-        },
-        methods : {
-            // 根据fid决定验证规则
+            },
             setRule () {
                 return new Promise((resolve, reject) => {
                     if(!this.id) {
@@ -182,28 +160,15 @@
                     }
                 })
             },
-
-            openImg () {
-                window.open(this.submitData.avatar, '_blank')
+            uploadSuccess (res) {
+                this.submitData.avatar = res.data.url
             },
-            uploadSuccess (e, file) {
-                let result = file.response
-                if(result.code) {
-                    this.submitData.avatar = result.data.url
-                } else {
-                    this.$Message.error(result.msg)
-                }
+            uploadError (err) {
+                this.$Message.error(err)
             },
-            delUploadImg () {
-                this.submitData.avatar = ''
-                this.$refs.upload.clearFiles()
-            },
-            uploadBefore () {
-                return new Promise((resolve, reject) => {
-                    this.uploadConfig.headers = new this.$Cm.getApiHeaderData(this.uploadConfig.otherData, false)
-                    resolve()
-                })
-            },
+            uploadDelete () {
+                this.submitData.icon = ''
+            }
             
         }
     } 
