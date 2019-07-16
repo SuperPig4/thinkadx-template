@@ -31,6 +31,15 @@ export default {
                     reject()
                 })
             })
+        }, randomString = (len) => {
+        　　len = len || 16;
+        　　var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';    /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
+        　　var maxPos = $chars.length;
+        　　var pwd = '';
+        　　for (var i = 0; i < len; i++) {
+        　　　　pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+        　　}
+        　　return pwd;
         }
 
         // 全局过滤器
@@ -120,7 +129,8 @@ export default {
                         this.token = store.getters.getToken()
                     }
                     this.timestamp = parseInt(Date.now()/1000)
-                    this.nonce = Math.random().toString(36).substr(2)
+                    // this.nonce = Math.random().toString(36).substr(2)
+                    this.nonce = randomString()
                     this.sign = ((data) => {
                         let paramsAr = [], 
                         cloneData = Object.assign(Object.assign({},this), data)
