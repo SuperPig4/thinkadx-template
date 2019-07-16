@@ -6,7 +6,7 @@
             :searchPlaceholder="listConfig.searchPlaceholder"
             :column="column">
         </Cm-List>
-
+        
     </div>
 </template>
 <script>
