@@ -4,7 +4,7 @@
     .layout-logo img{height:100%;}
     .layout-nav{width: 420px;margin: 0 auto; margin-right: 20px;}
     .layout-nav>li{ float:right !important;}
-    .Sider{ position: relative;  width: 15% !important; min-width: 15% !important; max-width: 15% !important; height:100%; background: #fff;}
+    .Sider{ overflow-y:scroll; position: relative;  width: 15% !important; min-width: 15% !important; max-width: 15% !important; height:100%; background: #fff;}
     .Sider a{ text-align: left; padding-left:60px !important;}
     .ivu-menu-submenu-title{ padding-left:30px !important; text-align: left !important;}
     .ivu-menu-item{padding-left:20px !important;}
