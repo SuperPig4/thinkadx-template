@@ -1,6 +1,5 @@
 <style>
     .top-circle{ margin:0 auto; margin-top:70px; width:800px; display:flex; justify-content: space-between;  }
-    .top-circle>div{  }
     .top-circle .circle-content h1{ font-size:20px; }
     .top-circle .circle-content p{ margin:10px 0px; color: #657180; }
     .top-circle .circle-content p span{ position: relative;}

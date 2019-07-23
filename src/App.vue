@@ -32,4 +32,25 @@
 .G-form{ margin-top:20px; width:400px; position: relative; }
 .G-form .ivu-form-item-label{ width:130px !important }
 
+/* 滚动条 */
+body::-webkit-scrollbar{
+    display:none;
+}
+
+::-webkit-scrollbar{
+    width:3px;
+    height:1px;
+}
+
+::-webkit-scrollbar-thumb {
+    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    background: #515a6e;
+}
+
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    border-radius: 10px;
+    background: #EDEDED;
+}
+
 </style>

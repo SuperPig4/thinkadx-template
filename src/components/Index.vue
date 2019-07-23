@@ -52,7 +52,7 @@
                     <Breadcrumb :style="{margin: '24px 0', textAlign:'left'}">
                         <BreadcrumbItem v-for="item in pathNameAr" v-bind:key="item" >{{item}}</BreadcrumbItem>
                     </Breadcrumb>
-                    <Content :style="{position : 'relative', padding: '24px', background: '#fff'}" >
+                    <Content  :style="{position : 'relative', padding: '24px', background: '#fff'}" >
                         <keep-alive>
                             <router-view ref="routerView" @on-topSetPathNameAr="setPathNameAr" v-if="$route.path.indexOf('index') != -1" ></router-view>
                         </keep-alive>
