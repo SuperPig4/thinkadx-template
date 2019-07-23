@@ -1,5 +1,11 @@
 Thinkadx-template
 ===============
+## 技术栈(前端)
+
+> vue3 全家桶
+
+> iview
+
 
 ## 使用git安装
 
@@ -19,4 +25,5 @@ Thinkadx-template
 6、默认账号密码 admin admin
 ~~~
 
-
+## 图片截图
+![图片](http://imgcontrol.xiaozha.top/uploads/imgs/20/e2153a78168921dd5266e094620fc4.png)
