@@ -129,7 +129,6 @@ export default {
                         this.token = store.getters.getToken()
                     }
                     this.timestamp = parseInt(Date.now()/1000)
-                    // this.nonce = Math.random().toString(36).substr(2)
                     this.nonce = randomString()
                     this.sign = ((data) => {
                         let paramsAr = [], 
@@ -149,7 +148,7 @@ export default {
                                 return '+'
                             }))
                         }   
-                        console.log(paramsAr.sort().join('&'))
+                        // console.log(paramsAr.sort().join('&'))
                         return md5(paramsAr.sort().join('&')).toUpperCase()
                     })(data)
                 }) (data, isUseToken)
@@ -203,7 +202,7 @@ export default {
                                             reject()
                                             iview.Modal.error({
                                                 title:'您的账号在其他地方登陆',
-                                                content:2,
+                                                content:'',
                                                 onOk: () => {
                                                     Vue.prototype.$Cm.dropOutLogin()
                                                 },

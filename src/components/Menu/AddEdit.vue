@@ -27,6 +27,9 @@
             <FormItem label="方法" prop="action" v-if="$route.params.fid != 0" >
                 <Input v-model="submitData.action" placeholder="请输入方法"></Input>
             </FormItem>
+            <FormItem label="排序值" prop="sort" >
+                <Input v-model="submitData.sort" placeholder="请输入排序值(越大越前)"></Input>
+            </FormItem>
 
             <div v-if="id" >
                 <FormItem>
@@ -60,6 +63,7 @@
                 id : 0,
                 isShowLoading : true,
                 submitData : {
+                    sort : 0,
                     icon : '',
                     title : '',
                     module : '',
