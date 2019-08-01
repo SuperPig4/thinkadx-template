@@ -51,7 +51,6 @@
         <Spin size="large" fix v-show="isShowLoading" ></Spin>
         <div class="left">
             <img src="../assets/images/2.jpg" ></img>
-            <!-- <div class="img"></div> -->
         </div>
         <div class="right">
             <Form  class="form-bg">
@@ -88,6 +87,7 @@ export default {
         this.$Cm.api('admin/config/get_system_config').then(res => {
             res.run(false).then(() => {
                 this.$store.commit('SetSystemConfig', res.data)
+                window.document.title = res.data.admin_system_name
             })
         }).finally(() => {
             this.isShowLoading =  false

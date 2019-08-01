@@ -90,6 +90,7 @@
             this.$Cm.api('admin/config/get_system_config').then(res => {
                 res.run(false).then(() => {
                     this.$store.commit('SetSystemConfig', res.data)
+                    window.document.title = res.data.admin_system_name
                 })
             })
         },
