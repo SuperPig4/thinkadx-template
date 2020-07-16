@@ -1,3 +1,10 @@
+/*
+ * @Descripttion: 
+ * @version: 
+ * @Author: 奔跑猪
+ * @Date: 2020-01-30 17:31:11
+ * @LastEditTime: 2020-07-16 08:00:00
+ */ 
 import Vue from 'vue'
 import App from './App.vue'
 import Cm from './plugins/Cm.js'
@@ -21,6 +28,7 @@ Vue.use(iview)
 Vue.component('Cm-List', CommonListCom)
 Vue.component('Cm-Upload', CommonUploadCom)
 
+console.log(process.env)
 new Vue({
     data () {
         return {

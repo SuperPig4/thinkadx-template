@@ -8,8 +8,8 @@ export default {
         //配置参数
         let Config = {
             //接口域名配置
-            // apiDomain : 'http://www.thinkadx-v2.cn/admin/',
-            apiDomain : 'http://www.thinkadx-v2.cn/',
+            // apiDomain : 'http://yizhongjiaoyu.cn/index.php/',
+            apiDomain : 'http://thinkadx.cn/index.php/',
             // 是否可执行强制退出操作,这个参数主要是为了防止强制退出被多次调用
             isAllowForceDropOutLogin : true
         }, RefreshTokenLogic = function() {
@@ -68,25 +68,11 @@ export default {
         let SystemConfigLogic = function(params, useFunName) {
             this.$nextTick(function () {
                 if(params) {
-                    
-                    let Config = Object.assign({
-                        // refresh 方法名 可以自定义
-                        // refreshFunName : 'refresh', 
-                        // 执行created的时候是否自动调用一次 refresh 方法
-                        // isAuthCallOnceRefresh : true
-                    }, (params || {}))
-
+                    let Config = Object.assign({}, (params || {}))
                     // 路径逻辑
                     if(Config.pathNameAr) {
                         this.$emit('on-topSetPathNameAr', Config.pathNameAr)
                     }
-        
-                    // refresh 逻辑
-                    // if(Config.isAuthCallOnceRefresh === true && useFunName == 'mounted') {
-                    //     if(this[Config.refreshFunName]) {
-                    //         this[Config.refreshFunName]()
-                    //     }
-                    // }
                 }      
             })
         }
@@ -95,7 +81,6 @@ export default {
                 SystemConfigLogic.call(this, this.SystemConfig, 'mounted')
             },
             activated () {
-                
                 SystemConfigLogic.call(this, this.SystemConfig, 'activated')
             }
         })
@@ -116,10 +101,13 @@ export default {
             },
             // 退出登陆
             dropOutLogin () {
+                // 发送请求
                 if(Config.isAllowForceDropOutLogin == true) {
                     Config.isAllowForceDropOutLogin = false
                     store.commit('EmptyUserInfo')
-                    router.push({ path:'/' })
+                    this.api('admin/admin_user/logout').finally(() => {
+                        router.push({ path:'/' })
+                    })
                 }
             },
             // 接口header鉴权 - 构造函数
@@ -168,6 +156,8 @@ export default {
             ) {
                 return new Promise((resolve, reject) => {
                     let header = Object.assign({},{
+                        'oauth-type'  : 'password',
+                        'port-type'   : 'api',
                         'Content-Type':'application/json'
                     },defaultHeader, new this.getApiHeaderData(data, isUseToken))
 

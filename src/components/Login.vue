@@ -105,7 +105,7 @@ export default {
             this.$Cm.api('admin/admin_user/login',{
                 access: this.user,
                 password: this.password,
-                oauth_type: "pwd",
+                oauth_type: "password",
                 port_type: "api",
                 verify_key : this.verify.key,
                 verify_code : this.verify.value,
