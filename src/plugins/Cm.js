@@ -2,14 +2,14 @@ import md5 from 'js-md5'
 import store from '@/vuex_state'
 import iview from 'iview'
 import router from '@/router_index'
+import apiObject from '@/lib/apiObject'
 
 export default {
     install : function(Vue, options) {
         //配置参数
         let Config = {
             //接口域名配置
-            // apiDomain : 'http://yizhongjiaoyu.cn/index.php/',
-            apiDomain : 'http://thinkadx.cn/index.php/',
+            apiDomain : 'http://'+ process.env.VUE_APP_HOST +'/index.php/',
             // 是否可执行强制退出操作,这个参数主要是为了防止强制退出被多次调用
             isAllowForceDropOutLogin : true
         }, RefreshTokenLogic = function() {
@@ -31,15 +31,6 @@ export default {
                     reject()
                 })
             })
-        }, randomString = (len) => {
-        　　len = len || 16;
-        　　var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';    /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
-        　　var maxPos = $chars.length;
-        　　var pwd = '';
-        　　for (var i = 0; i < len; i++) {
-        　　　　pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
-        　　}
-        　　return pwd;
         }
 
         // 全局过滤器
@@ -110,59 +101,64 @@ export default {
                     })
                 }
             },
-            // 接口header鉴权 - 构造函数
+            /**
+             * 接口header鉴权
+             * 
+             * @param any  data 参数 - 废弃
+             * @param bool isUseToken 是否使用token
+             * 
+             * @return object
+             */
             getApiHeaderData (data = {}, isUseToken = true) {
                 return new (function(data, isUseToken) {
-                    if(isUseToken === true && store.state.access_token.token) {
-                        this.token = store.getters.getToken()
-                    }
-                    this.timestamp = parseInt(Date.now()/1000)
-                    this.nonce = randomString()
-                    this.sign = ((data) => {
-                        let paramsAr = [], 
-                        cloneData = Object.assign(Object.assign({},this), data)
-                        for(let i in cloneData) {
-                            cloneData[i] == null && (cloneData[i] = '')
-                            let item = cloneData[i]
-                            // 判断是否为数组
-                            if(item instanceof Array) {
-                                item = JSON.stringify(item)
-                            }
-                            paramsAr.push(i + '=' + encodeURIComponent(item).replace(/[!'()*]/g, function(c) {
-                                return '%' + c.charCodeAt(0).toString(16).toUpperCase();
-                            }).replace(/%20/g, function(c) {
-                                return '+'
-                            }).replace(/%2B/g, function(c) {
-                                return '+'
-                            }))
-                        }   
-                        // console.log(paramsAr.sort().join('&'))
-                        return md5(paramsAr.sort().join('&')).toUpperCase()
-                    })(data)
-                }) (data, isUseToken)
+                    // token
+                    if(isUseToken === true && store.state.access_token.token) this.token = store.getters.getToken();
+
+                    this['oauth-type'] = 'password';
+                    this['port-type'] = 'api';
+                    this.appid = process.env.VUE_APP_APPID;
+                    this.timestamp = parseInt(Date.now()/1000);
+                    this.sign =  md5('appid=' + process.env.VUE_APP_APPID + '&timestamp=' + this.timestamp + '&appsecret=' + process.env.VUE_APP_APPSECRET).toUpperCase();
+                }) (data, isUseToken);
             },
-            // 请求接口
-            api (
-                //接口地址
-                url, 
-                //地址
-                data = {}, 
-                //头部
-                defaultHeader = {}, 
-                //是否使用token
-                isUseToken = true,
-                //是否监听token过期
-                isNoteTokenRunError = true
-            ) {
+
+            /**
+             * API对象 - 构造函数
+             */
+            apiObject () {
+
+            },
+            
+            /**
+             * 请求接口
+             * 
+             * @param String/Bool url            请求地址 / 返回API对象
+             * @param Object data                发送参数
+             * @param String method              请求类型
+             * @param Object defaultHeader       默认header头
+             * @param Bool   isUseToken          是否使用token
+             * @param Bool   isNoteTokenRunError 是否监听token过期
+             * 
+             * @return new Promise
+             */
+            api (url, data = {}, method = 'POST', defaultHeader = {}, isUseToken = true, isNoteTokenRunError = true) {
+                let newApiObject = new apiObject();
+                if(url === false) {
+                    return newApiObject;
+                } else {
+                    return new Promise((resolve, reject) => {
+                        
+                    })
+                }
+
+
                 return new Promise((resolve, reject) => {
                     let header = Object.assign({},{
-                        'oauth-type'  : 'password',
-                        'port-type'   : 'api',
                         'Content-Type':'application/json'
-                    },defaultHeader, new this.getApiHeaderData(data, isUseToken))
+                    },defaultHeader, this.getApiHeaderData(data, isUseToken));
 
                     Vue.axios({
-                        method : 'POST',
+                        method : method,
                         url : Config.apiDomain + url,
                         headers : header,
                         data : data
@@ -236,6 +232,7 @@ export default {
                         reject()
                     })
                 })
+
             }
         }
 
