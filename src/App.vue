@@ -33,13 +33,13 @@
 .G-form .ivu-form-item-label{ width:130px !important }
 
 /* 滚动条 */
-body::-webkit-scrollbar{
+/* body::-webkit-scrollbar{
     display:none;
-}
+} */
 
 ::-webkit-scrollbar{
-    width:3px;
-    height:1px;
+    width:8px;
+    height:8px;
 }
 
 ::-webkit-scrollbar-thumb {

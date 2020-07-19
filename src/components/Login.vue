@@ -1,5 +1,5 @@
 <style>
-    #login { position: relative; height: 100%;}
+    #login { position: relative; height: 100%; }
 
     .right { width: 35%; float: right; height: 100%; background:#f8f8f9;}
     .left { width: 65%; float: left; height: 100%; display:flex;  justify-content: center;  align-items: center; background: #2f5191;}
@@ -27,12 +27,12 @@
             <Form  class="form-bg">
                 <h1>{{$store.state.system_config.admin_system_name}}</h1>
                 <FormItem class="input-item">
-                    <Input type="text" size="large" v-model="user" placeholder="请输入账号">
+                    <Input type="text" size="large" autocomplete="on" v-model="user" placeholder="请输入账号">
                         <Icon type="ios-contact" slot="prefix" />
                     </Input>
                 </FormItem>
                 <FormItem class="input-item" >
-                    <Input type="password" size="large" v-model="password"  placeholder="请输入密码">
+                    <Input type="password" size="large" autocomplete="on" v-model="password"  placeholder="请输入密码">
                         <Icon type="ios-lock-outline" slot="prefix"></Icon>
                     </Input>
                 </FormItem>
@@ -41,12 +41,17 @@
                         <div class="img-bg">
                             <img :src="verify.img" />
                         </div>
-                        <!-- <div class="refresh" @click="imgVerify" >
-                            点击刷新
-                        </div> -->
                     </div>
-                    <Input @on-focus="showVerify" @on-blur="showVerify" size="large" v-model="verify.value"  placeholder="请输入验证码(点击显示验证码)">
+                    <Input 
+                        @on-focus="showVerify" 
+                        @on-blur="showVerify" 
+                        :autofocus="isAutofocus"
+                        size="large" 
+                        v-model="verify.value"  
+                        placeholder="请输入验证码(点击显示验证码)"
+                    >
                         <Icon type="ios-bookmark-outline" slot="prefix"></Icon>
+                        <Icon type="ios-search" @click="clickIconRefresh" slot="suffix" />
                     </Input>
                 </FormItem>
                 <FormItem class="input-item">
@@ -64,6 +69,7 @@
             return {
                 isShowLoading : true,
                 isLogin : false,
+                isAutofocus : false,
                 user: "",
                 password: "",
                 verify : {
@@ -84,7 +90,17 @@
                 this.isShowLoading =  false
             })
         },
+        watch : {
+            'verify.status' : function(val) {
+                this.isAutofocus = val;
+            }
+        },
         methods: {
+            // 点击ICON刷新二维码
+            clickIconRefresh () {
+                this.verify.status = true;
+                this.imgVerify();
+            },
             // 创建图片验证码
             imgVerify () {
                 this.$Cm.api(tool.verifyKey).then(res => {
@@ -95,8 +111,8 @@
                 })
             },
             // 显示验证码
-            showVerify () {
-                this.verify.status = !this.verify.status
+            showVerify (e) {
+                this.verify.status = e.type == 'focus' ? true : false;
                 if(this.verify.status) {
                     this.imgVerify()
                 }
