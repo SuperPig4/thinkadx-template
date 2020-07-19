@@ -58,79 +58,85 @@
 </template>
 
 <script>
-export default {
-    data() {
-        return {
-            isShowLoading : true,
-            isLogin : false,
-            user: "",
-            password: "",
-            verify : {
-                status : false,
-                img : '',
-                key : '',
-                value : ''
-            }
-        };
-    },
-    created: function() {
-        this.$Cm.api('admin/config/get_system_config').then(res => {
-            res.run(false).then(() => {
-                this.$store.commit('SetSystemConfig', res.data)
-                window.document.title = res.data.admin_system_name
-            })
-        }).finally(() => {
-            this.isShowLoading =  false
-        })
-    },
-    methods: {
-        // 创建图片验证码
-        imgVerify () {
-            this.$Cm.api('admin/tool/get_verify_key').then(res => {
-                res.run(false).then(() => {
-                    this.verify.key = res.data
-                    this.verify.img = this.$Cm.getConfig().apiDomain + 'admin/tool/get_verify_img?key=' + res.data 
-                })
-            })
-        },
-        // 显示验证码
-        showVerify () {
-            this.verify.status = !this.verify.status
-            if(this.verify.status) {
-                this.imgVerify()
-            }
-        },
-        submit() {
-            this.isLogin = true
-            this.$Cm.api('admin/admin_user/login',{
-                access: this.user,
-                password: this.password,
-                oauth_type: "password",
-                port_type: "api",
-                verify_key : this.verify.key,
-                verify_code : this.verify.value,
-            }, {} , false).then(res => {
-                if(res.code == 0) {
-                    this.$Message.error({
-                        content : res.msg,
-                        duration: 3,
-                        closable: true
-                    })
-                } else {
-                    this.$store.commit("SetToken", {
-                        type: "refresh",
-                        value: Object.assign({time: parseInt(Date.now() / 1000)}, res.data.refresh_token)
-                    })
-                    this.$store.commit("SetToken", {
-                        value: Object.assign({time: parseInt(Date.now() / 1000)}, res.data.access_token)
-                    });
-                    this.$router.push({ path: "main" });
-                    this.$Cm.loginSuccessInitConfig();
+    import { admin, system, tool } from '@/utils/api'
+    export default {
+        data() {
+            return {
+                isShowLoading : true,
+                isLogin : false,
+                user: "",
+                password: "",
+                verify : {
+                    status : false,
+                    img : '',
+                    key : '',
+                    value : ''
                 }
+            };
+        },
+        created: function() {
+            this.$Cm.api(system.config).then(res => {
+                res.run(false).then(() => {
+                    this.$store.commit('SetSystemConfig', res.data)
+                    window.document.title = res.data.admin_system_name
+                })
             }).finally(() => {
-                this.isLogin = false
+                this.isShowLoading =  false
             })
+        },
+        methods: {
+            // 创建图片验证码
+            imgVerify () {
+                this.$Cm.api(tool.verifyKey).then(res => {
+                    res.run(false).then(() => {
+                        this.verify.key = res.data
+                        this.verify.img = this.$Cm.getConfig().apiDomain + 'admin/tool/get_verify_img?key=' + res.data 
+                    })
+                })
+            },
+            // 显示验证码
+            showVerify () {
+                this.verify.status = !this.verify.status
+                if(this.verify.status) {
+                    this.imgVerify()
+                }
+            },
+            submit() {
+                this.isLogin = true
+                this.$Cm.api(admin.login,{
+                    access: this.user,
+                    password: this.password,
+                    oauth_type: "password",
+                    port_type: "api",
+                    verify_key : this.verify.key,
+                    verify_code : this.verify.value,
+                }, {} , false).then(res => {
+                    res.run(false).then(res => {
+                        let refresh = res.data.refresh, access = res.data.access;
+
+                        this.$store.commit("SetToken", {
+                            type: "refresh",
+                            value : {
+                                token: refresh.token,
+                                expire_time : refresh.expire_time,
+                            }
+                        });
+
+                        this.$store.commit("SetToken", {
+                            type: "access",
+                            value : {
+                                token: access.token,
+                                expire_time : access.expire_time,
+                            }
+                        });
+
+                        this.$router.push({ path: "main" });
+                        this.$Cm.loginSuccessInitConfig();
+                    })
+                }).finally(() => {
+                    this.isLogin = false
+                })
+            }
         }
-    }
-};
+    };
 </script>

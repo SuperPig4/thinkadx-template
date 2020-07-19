@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import createPersistedState from "vuex-persistedstate"
 import * as Cookies from 'js-cookie'
+import moment from 'moment'
 
 Vue.use(Vuex)
 
@@ -49,10 +50,13 @@ const state = new Vuex.Store({
         }, 
         // 修改令牌
         SetToken (state, param) {
+            let value = Object.assign({
+                system_expire_time : moment().add(param.value.expire_time,'seconds').unix() 
+            }, param.value);
             if(param.type == 'refresh') {
-                state.refresh_token = param.value
+                state.refresh_token = value;
             } else {
-                state.access_token = param.value
+                state.access_token = value;
             }
         },
         // 置入用户信息

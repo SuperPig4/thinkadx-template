@@ -1,10 +1,3 @@
-/*
- * @Descripttion: 
- * @version: 
- * @Author: 奔跑猪
- * @Date: 2020-01-30 17:31:11
- * @LastEditTime: 2020-07-18 09:32:00
- */ 
 import Vue from 'vue'
 import App from './App.vue'
 import Cm from './plugins/Cm.js'
@@ -15,11 +8,13 @@ import iview from 'iview'
 import router from './router_index.js'
 import CommonListCom from './components/Common/List'
 import CommonUploadCom from './components/Common/Upload'
+import moment from 'moment'
 
 import 'iview/dist/styles/iview.css'
 import './assets/css/init.css'
 
 Vue.config.productionTip = false
+Vue.prototype.$moment = moment;
 
 Vue.use(Cm)
 Vue.use(VueAxios,axios);
