@@ -1,7 +1,6 @@
 import md5 from 'js-md5'
-import store from '@/vuex_state'
+import store from '@/state/index'
 import iview from 'iview'
-import router from '@/router_index'
 import moment from 'moment'
 
 
@@ -117,12 +116,11 @@ export default {
                     this.sign =  md5('appid=' + process.env.VUE_APP_APPID + '&timestamp=' + this.timestamp + '&nonce=' + this.nonce + '&appsecret=' + process.env.VUE_APP_APPSECRET).toUpperCase();
                 }) (isUseToken);
             },
-
             
             /**
              * 请求接口
              * 
-             * @param Object/Bool info            请求对象 / 返回API对象
+             * @param Object/Bool e                   请求对象
              * @param Object      data                发送参数
              * @param object      config              配置
              * @param Object      defaultHeader       默认header头

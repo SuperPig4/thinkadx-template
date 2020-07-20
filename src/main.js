@@ -1,14 +1,20 @@
 import Vue from 'vue'
 import App from './App.vue'
-import Cm from './plugins/Cm.js'
+
+// 依赖
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-import store from './vuex_state'
 import iview from 'iview'
-import router from './router_index.js'
+import moment from 'moment'
+
+// 自定义组件、插件
 import CommonListCom from './components/Common/List'
 import CommonUploadCom from './components/Common/Upload'
-import moment from 'moment'
+import Cm from './plugins/Cm'
+
+// 路由、存储
+import router from '@/router/index'
+import store from '@/state/index'
 
 import 'iview/dist/styles/iview.css'
 import './assets/css/init.css'
