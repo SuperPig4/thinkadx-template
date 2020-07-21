@@ -11,11 +11,6 @@
 
     .Sider{ padding:0px 10px; overflow-y:scroll; position: relative;  height:100%; background: #515a6e; overflow-x: hidden;}
     .Sider a{ text-align: left; padding-left:60px !important;}
-    .ivu-menu-submenu-title{ padding-left:30px !important; text-align: left !important;}
-    .ivu-menu-item{padding-left:20px !important;}
-    .refresh{ position:absolute; top:80px; right:40px; z-index:800; }
-    .jumpmain{ position:absolute; top:80px; right:80px; z-index:800; }
-    .menu-icon{ width:14px; height:14px; position: relative; top:2px; }
 
     .footer{ position:absolute; bottom:0px; width:100%; z-index:1000; background:#515a6e; color:#fff; text-align: center; padding:0px; height:40px; line-height: 40px;}
 </style>
@@ -33,9 +28,9 @@
                 :width="250" 
                 class="Sider" 
                 >
-                <div class="layout-logo">
-                    {{$store.state.system_config.admin_system_name}}
-                </div>
+                    <div class="layout-logo">
+                        {{$store.state.system_config.admin_system_name}}
+                    </div>
                 <CmMenu />
             </Sider>
 
@@ -44,7 +39,7 @@
                 <!-- 头部 -->
                 <Header class="header">
                     <div class="left-action" >
-                        <Icon class="icon" @click="collapsedSider" type="md-menu" size="24"></Icon>
+                        <Icon class="icon" @click="toggleLeftMenu" type="md-menu" size="24"></Icon>
                         <Icon class="icon" @click="jumpMain" type="ios-home-outline" size="24"></Icon>
                         <Icon class="icon" @click="refreshAct" type="md-refresh" size="24"></Icon>
                     </div>
@@ -61,13 +56,13 @@
                                 <Icon :style="{marginLeft:'10px', color:'#515a6e'}" type="ios-arrow-down"></Icon>
                             </a>
                             <DropdownMenu slot="list">
+                                <DropdownItem name="cleanSystemCache">清空系统缓存</DropdownItem>
                                 <DropdownItem name="setPassword">修改密码</DropdownItem>
                                 <DropdownItem name="dropOutLogin" divided >退出</DropdownItem>
                             </DropdownMenu>
                         </Dropdown>
                     </div>
                 </Header>
-                
                 
                 <!-- 右侧内容 -->
                 <Layout :style="{padding: '15px', paddingBottom: '60px', height:'93%'}" >
@@ -95,6 +90,7 @@
     </div>
 </template>
 <script>
+    import { admin,system,tool } from '@/utils/api'
     import CmMenu from './Menu'
     export default {
         data () {
@@ -111,14 +107,14 @@
         },
         created () {
             // 用户信息
-            this.$Cm.api('admin/admin_user/info').then(res => {
+            this.$Cm.api(admin.adminUser.info).then(res => {
                 res.run(false).then(() => {
                     this.$store.commit("SetUserInfo", res.data)
                 })
             })
 
             // 最新的配置信息
-            this.$Cm.api('admin/config/get_system_config').then(res => {
+            this.$Cm.api(system.config).then(res => {
                 res.run(false).then(() => {
                     this.$store.commit('SetSystemConfig', res.data)
                     window.document.title = res.data.admin_system_name
@@ -126,17 +122,17 @@
             })
         },
         methods: {
-            collapsedSider () {
+            // 切换显示
+            toggleLeftMenu () {
                 this.$refs.side1.toggleCollapse();
             },
-            
+            // 头像
             getAvatar() {
                 if(this.$store.state.user_info.avatar) {
                     return this.$store.state.user_info.avatar.url
                 } else {
                     return ''
                 }
-                
             },
             /**
              * 修改路径名
@@ -149,14 +145,17 @@
                     this.pathNameAr.push(age)
                 }
             },
+            // 跳转到main
             jumpMain () {
                 this.$router.push('/main');
             },
+            // 刷新当前main组件
             refreshAct () {
                 if(this.$refs.routerView.refresh) {
                     this.$refs.routerView.refresh()
                 }
             },
+            // 用户下拉菜单点击事件
             userDropdownEv (name) {
                 switch(name) {
                     case 'dropOutLogin' :
@@ -164,6 +163,14 @@
                         break;
                     case 'setPassword' :
                             this.$router.push('/main/set_password')
+                        break;
+                    case 'cleanSystemCache' :
+                            // 清空系统缓存
+                            this.$Cm.api(tool.cleanExpiredCache).then((res) => {
+                                res.run(false).then(() => {
+                                    this.$Message.success('缓存清除成功') 
+                                })
+                            })
                         break;
                 }
             }

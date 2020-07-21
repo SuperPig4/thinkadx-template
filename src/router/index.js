@@ -15,11 +15,6 @@ const router = new VueRouter({
             path : '/main',
             component : resolve => require(['@/view/Index'], resolve),
             children : [
-                // 工具-清空过期缓存
-                {
-                    path : 'tool_empty_expired_cache',
-                    component : resolve => require(['@/view/Tool/tool_empty_expired_cache'], resolve)
-                },
                 // 菜单首页
                 {
                     path : 'menu_index',
