@@ -1,10 +1,15 @@
 <style>
     .layout{height:100%;background: #f5f7f9;position: relative;overflow: hidden;}
-    .layout-logo{height: 30px;color:#fff;line-height: 30px;border-radius: 3px;float: left;font-size:20px;position: absolute;top: 15px;left: -2%;}
+    .layout-logo{height: 64px;color:#fff;line-height: 64px; text-align: center; border-radius: 3px;font-size:20px; }
     .layout-logo img{height:100%;}
-    .layout-nav{width: 420px;margin: 0 auto; margin-right: 20px;}
-    .layout-nav>li{ float:right !important;}
-    .Sider{ padding-left:10px; overflow-y:scroll; position: relative;  height:100%; background: #515a6e;}
+    
+    .header{ padding-left:0px; background:#fff; box-shadow:inset 0 0 5px rgba(0,0,0,0.2);}
+    .header .user-info{ float:right;}
+    .header .left-action{ height:100%; float: left; padding-left:10px;}
+    .header .left-action .icon{ line-height:60px; padding:0px 20px; height:100%;}
+    .header .left-action .icon:hover{ background:#515a6e; color:#fff; }
+
+    .Sider{ padding:0px 10px; overflow-y:scroll; position: relative;  height:100%; background: #515a6e; overflow-x: hidden;}
     .Sider a{ text-align: left; padding-left:60px !important;}
     .ivu-menu-submenu-title{ padding-left:30px !important; text-align: left !important;}
     .ivu-menu-item{padding-left:20px !important;}
@@ -12,59 +17,68 @@
     .jumpmain{ position:absolute; top:80px; right:80px; z-index:800; }
     .menu-icon{ width:14px; height:14px; position: relative; top:2px; }
 
-    .footer{ position:fixed; bottom:0px; width:100%; z-index:1000; background:#515a6e; color:#fff; text-align: center; height:15px; line-height: 7.5px;}
+    .footer{ position:absolute; bottom:0px; width:100%; z-index:1000; background:#515a6e; color:#fff; text-align: center; padding:0px; height:40px; line-height: 40px;}
 </style>
 <template>
     <div class="layout">
         <Layout :style="{height:'100%'}">
-            <!-- 头部 -->
-            <Header>
-                <Menu mode="horizontal" theme="dark">
-                    <div class="layout-logo">
-                        {{$store.state.system_config.admin_system_name}}
-                    </div>
-                    <div class="layout-nav" >
-                        <MenuItem name="1">
-                            <Dropdown @on-click="userDropdownEv" >
-                                <a href="javascript:void(0)">
-                                    <Avatar v-if="$store.state.user_info.avatar" :src="$store.state.user_info.avatar.url" />
-                                    <Avatar v-else >
-                                        <template v-if="!$store.state.user_info.avatar">
-                                            User
-                                        </template>
-                                    </Avatar>
-                                    <Icon :style="{marginLeft:'10px', color:'#fff'}" type="ios-arrow-down"></Icon>
-                                </a>
-                                <DropdownMenu slot="list">
-                                    <DropdownItem name="setPassword">修改密码</DropdownItem>
-                                    <DropdownItem name="dropOutLogin" divided >退出</DropdownItem>
-                                </DropdownMenu>
-                            </Dropdown>
-                        </MenuItem>
-                    </div>
-                </Menu>
-            </Header>
 
-            <Layout :style="{height:'100%'}" >
-                <!-- 左侧菜单 -->
+            <!-- 左侧菜单 -->
+            <Sider
+                ref="side1" 
+                hide-trigger 
+                collapsible 
+                :collapsed-width="0" 
+                v-model="isCollapsed"
+                :width="250" 
+                class="Sider" 
+                >
+                <div class="layout-logo">
+                    {{$store.state.system_config.admin_system_name}}
+                </div>
+                <CmMenu />
+            </Sider>
+
+            <Layout :style="{height:'100%', position:'relative'}" >
                 
-                <Sider hide-trigger :width="250" class="Sider" >
-                    <CmMenu />
-                </Sider>
+                <!-- 头部 -->
+                <Header class="header">
+                    <div class="left-action" >
+                        <Icon class="icon" @click="collapsedSider" type="md-menu" size="24"></Icon>
+                        <Icon class="icon" @click="jumpMain" type="ios-home-outline" size="24"></Icon>
+                        <Icon class="icon" @click="refreshAct" type="md-refresh" size="24"></Icon>
+                    </div>
+                    
+                    <div class="user-info" >
+                         <Dropdown @on-click="userDropdownEv" >
+                            <a href="javascript:void(0)">
+                                <Avatar v-if="$store.state.user_info.avatar" :src="$store.state.user_info.avatar.url" />
+                                <Avatar v-else >
+                                    <template v-if="!$store.state.user_info.avatar">
+                                        User
+                                    </template>
+                                </Avatar>
+                                <Icon :style="{marginLeft:'10px', color:'#515a6e'}" type="ios-arrow-down"></Icon>
+                            </a>
+                            <DropdownMenu slot="list">
+                                <DropdownItem name="setPassword">修改密码</DropdownItem>
+                                <DropdownItem name="dropOutLogin" divided >退出</DropdownItem>
+                            </DropdownMenu>
+                        </Dropdown>
+                    </div>
+                </Header>
                 
                 
                 <!-- 右侧内容 -->
-                <Layout :style="{padding: '15px', paddingBottom:'39px', height:'920px'}" >
-                    <Button @click="refreshAct" title="刷新" class="refresh" type="primary" shape="circle" icon="md-refresh"></Button>
-                    <Button @click="jumpMain" title="主页" class="jumpmain" type="success" shape="circle" icon="ios-list-box"></Button>
-                    
+                <Layout :style="{padding: '15px', paddingBottom: '60px', height:'93%'}" >
+                    <!-- 路径 -->
                     <Breadcrumb :style="{margin: '10px 0 15px', textAlign:'left'}">
                         <BreadcrumbItem v-for="item in pathNameAr" v-bind:key="item" >{{item}}</BreadcrumbItem>
                     </Breadcrumb>
 
                     <!-- 内容 -->
-                    <Card :style="{height:'100%', overflow:'auto'}">
-                        <Content :style="{position : 'relative', padding: '24px', background: '#fff'}" >
+                    <Card :style="{overflow:'auto'}">
+                        <Content :style="{position : 'relative', background: '#fff'}" >
                             <keep-alive>
                                 <router-view ref="routerView" @on-topSetPathNameAr="setPathNameAr" v-if="$route.meta.keepAlive" ></router-view>
                             </keep-alive>
@@ -72,10 +86,11 @@
                         </Content>
                     </Card>
                 </Layout>
+
+                <!-- 底部版权 -->
+                <Footer class="footer" >thinkadx</Footer>
             </Layout>
             
-            <!-- 底部版权 -->
-            <Footer class="footer" >thinkadx</Footer>
         </Layout>
     </div>
 </template>
@@ -87,7 +102,8 @@
                 // 路径名
                 pathNameAr : [
                     'Loading'
-                ]
+                ],
+                isCollapsed : false
             }
         },
         components : {
@@ -110,6 +126,10 @@
             })
         },
         methods: {
+            collapsedSider () {
+                this.$refs.side1.toggleCollapse();
+            },
+            
             getAvatar() {
                 if(this.$store.state.user_info.avatar) {
                     return this.$store.state.user_info.avatar.url
