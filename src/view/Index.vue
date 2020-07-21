@@ -4,17 +4,20 @@
     .layout-logo img{height:100%;}
     .layout-nav{width: 420px;margin: 0 auto; margin-right: 20px;}
     .layout-nav>li{ float:right !important;}
-    .Sider{ overflow-y:scroll; position: relative;  width: 15% !important; min-width: 15% !important; max-width: 15% !important; height:100%; background: #fff;}
+    .Sider{ padding-left:10px; overflow-y:scroll; position: relative;  height:100%; background: #515a6e;}
     .Sider a{ text-align: left; padding-left:60px !important;}
     .ivu-menu-submenu-title{ padding-left:30px !important; text-align: left !important;}
     .ivu-menu-item{padding-left:20px !important;}
     .refresh{ position:absolute; top:80px; right:40px; z-index:800; }
     .jumpmain{ position:absolute; top:80px; right:80px; z-index:800; }
     .menu-icon{ width:14px; height:14px; position: relative; top:2px; }
+
+    .footer{ position:fixed; bottom:0px; width:100%; z-index:1000; background:#515a6e; color:#fff; text-align: center; height:15px; line-height: 7.5px;}
 </style>
 <template>
     <div class="layout">
         <Layout :style="{height:'100%'}">
+            <!-- 头部 -->
             <Header>
                 <Menu mode="horizontal" theme="dark">
                     <div class="layout-logo">
@@ -43,24 +46,36 @@
             </Header>
 
             <Layout :style="{height:'100%'}" >
-                <Sider hide-trigger class="Sider" >
+                <!-- 左侧菜单 -->
+                
+                <Sider hide-trigger :width="250" class="Sider" >
                     <CmMenu />
                 </Sider>
-                <Layout :style="{padding: '0 24px 24px'}" >
+                
+                
+                <!-- 右侧内容 -->
+                <Layout :style="{padding: '15px', paddingBottom:'39px', height:'920px'}" >
                     <Button @click="refreshAct" title="刷新" class="refresh" type="primary" shape="circle" icon="md-refresh"></Button>
                     <Button @click="jumpMain" title="主页" class="jumpmain" type="success" shape="circle" icon="ios-list-box"></Button>
-                    <Breadcrumb :style="{margin: '24px 0', textAlign:'left'}">
+                    
+                    <Breadcrumb :style="{margin: '10px 0 15px', textAlign:'left'}">
                         <BreadcrumbItem v-for="item in pathNameAr" v-bind:key="item" >{{item}}</BreadcrumbItem>
                     </Breadcrumb>
-                    <Content  :style="{position : 'relative', padding: '24px', background: '#fff'}" >
-                        <keep-alive>
-                            <router-view ref="routerView" @on-topSetPathNameAr="setPathNameAr" v-if="$route.path.indexOf('index') != -1" ></router-view>
-                        </keep-alive>
-                        <router-view ref="routerView" @on-topSetPathNameAr="setPathNameAr" v-if="$route.path.indexOf('index') == -1" ></router-view>
-                    </Content>
+
+                    <!-- 内容 -->
+                    <Card :style="{height:'100%', overflow:'auto'}">
+                        <Content :style="{position : 'relative', padding: '24px', background: '#fff'}" >
+                            <keep-alive>
+                                <router-view ref="routerView" @on-topSetPathNameAr="setPathNameAr" v-if="$route.meta.keepAlive" ></router-view>
+                            </keep-alive>
+                            <router-view ref="routerView" @on-topSetPathNameAr="setPathNameAr" v-if="!$route.meta.keepAlive" ></router-view>
+                        </Content>
+                    </Card>
                 </Layout>
             </Layout>
             
+            <!-- 底部版权 -->
+            <Footer class="footer" >thinkadx</Footer>
         </Layout>
     </div>
 </template>

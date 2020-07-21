@@ -1,3 +1,10 @@
+<!--
+ * @Author: 奔跑猪
+ * @Date: 2020-01-30 17:31:11
+ * @LastEditors: 奔跑猪
+ * @LastEditTime: 2020-07-21 11:44:14
+ * @Descripttion: 
+--> 
 <template>
   <div id="app">
     <router-view></router-view>
@@ -37,20 +44,23 @@
     display:none;
 } */
 
+/*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/  
 ::-webkit-scrollbar{
     width:8px;
     height:8px;
 }
 
+/*定义滑块 内阴影+圆角*/  
 ::-webkit-scrollbar-thumb {
     -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
     background: #515a6e;
 }
 
-::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
-    border-radius: 10px;
-    background: #EDEDED;
-}
+/*定义滚动条轨道 内阴影+圆角*/ 
+/* ::-webkit-scrollbar-track { */
+    /* -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2); */
+    /* border-radius: 10px; */
+    /* background: #EDEDED; */
+/* } */
 
 </style>

@@ -23,7 +23,10 @@ const router = new VueRouter({
                 // 菜单首页
                 {
                     path : 'menu_index',
-                    component : resolve => require(['@/view/Menu/Index'], resolve)
+                    component : resolve => require(['@/view/Menu/Index'], resolve),
+                    meta : {
+                        keepAlive : true
+                    }
                 },
                 {
                     path : 'menu_add_edit/:fid/:id?',
@@ -36,7 +39,10 @@ const router = new VueRouter({
                 },
                 {
                     path : 'admin_user_index',
-                    component : resolve => require(['@/view/Admin/Index'], resolve)
+                    component : resolve => require(['@/view/Admin/Index'], resolve),
+                    meta : {
+                        keepAlive : true
+                    }
                 },
                 {
                     path : 'admin_user_add_edit/:id?',
@@ -45,7 +51,10 @@ const router = new VueRouter({
                 // 管理员分组
                 {
                     path : 'admin_group_index',
-                    component : resolve => require(['@/view/AdminGroup/Index'], resolve)
+                    component : resolve => require(['@/view/AdminGroup/Index'], resolve),
+                    meta : {
+                        keepAlive : true
+                    }
                 },
                 {
                     path : 'admin_group_add_edit/:id?',
@@ -54,7 +63,10 @@ const router = new VueRouter({
                 // 管理员分组规则
                 {
                     path : 'admin_rule_index',
-                    component : resolve => require(['@/view/AdminRule/Index'], resolve)
+                    component : resolve => require(['@/view/AdminRule/Index'], resolve),
+                    meta : {
+                        keepAlive : true
+                    }
                 },
                 {
                     path : 'admin_rule_add_edit/:id?',
@@ -63,7 +75,10 @@ const router = new VueRouter({
                 // 配置文件
                 {
                     path : 'config_index',
-                    component : resolve => require(['@/view/Config/Index'], resolve)
+                    component : resolve => require(['@/view/Config/Index'], resolve),
+                    meta : {
+                        keepAlive : true
+                    }
                 },
                 {
                     path : 'config_add_edit/:id?',
@@ -72,7 +87,10 @@ const router = new VueRouter({
                 // 管理员操作日志
                 {
                     path : 'admin_log_index',
-                    component : resolve => require(['@/view/AdminLog/Index'], resolve)
+                    component : resolve => require(['@/view/AdminLog/Index'], resolve),
+                    meta : {
+                        keepAlive : true
+                    }
                 },
                 {
                     path : '',

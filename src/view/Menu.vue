@@ -4,7 +4,7 @@
 <template>
     <div >
         <Spin size="large" fix v-show="isShowLoading" ></Spin>
-        <Menu theme="light" width="auto" >
+        <Menu theme="light" width="auto" accordion>
             <Submenu :name="item.id" v-for="item in menuList" v-bind:key="item.id" >
                 <template slot="title">
                     <img :src="item.icon.url" class="menu-icon" ></img>
