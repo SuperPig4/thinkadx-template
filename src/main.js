@@ -6,6 +6,7 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import iview from 'iview'
 import moment from 'moment'
+import echarts from 'echarts'
 
 // 自定义组件、插件
 import CommonListCom from './components/Common/List'
@@ -20,16 +21,17 @@ import 'iview/dist/styles/iview.css'
 import './assets/css/init.css'
 
 Vue.config.productionTip = false
-Vue.prototype.$moment = moment;
+Vue.prototype.$moment = moment
+Vue.prototype.$echarts = echarts
 
 Vue.use(Cm)
-Vue.use(VueAxios,axios);
+Vue.use(VueAxios,axios)
 Vue.use(iview)
 
 Vue.component('Cm-List', CommonListCom)
 Vue.component('Cm-Upload', CommonUploadCom)
 
-console.log(process.env)
+
 new Vue({
     data () {
         return {

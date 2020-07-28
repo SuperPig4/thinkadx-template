@@ -13,6 +13,8 @@ export const system =  {
 } 
 
 export const tool =  {
+    // main
+    main : 'admin/tool/main',
     // 验证码key
     verifyKey : 'admin/tool/get_verify_key',
     // 清空系统缓存
