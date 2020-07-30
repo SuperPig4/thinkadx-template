@@ -2,9 +2,9 @@ Thinkadx-template
 ===============
 ## 技术栈(前端)
 
-> vue3 全家桶
+1. vue(vue-cli3创建)
 
-> iview
+2. UI框架 iview
 
 
 ## 使用git安装
@@ -17,13 +17,13 @@ Thinkadx-template
 
 3、修改配置信息copy一份.example.env并改名为.env,按照注释填写参数即可
 
-启动vue3的ui界面
-4、vue ui
+启动项目
+4.npm run serve OR vue ui
 
-5、点击任务->serve->启动->启动APP
-
-6、默认账号密码 admin admin
+5、登录 账号:admin 密码:admin
 ~~~
 
 ## 图片截图
-![图片](http://imgcontrol.xiaozha.top/uploads/imgs/20/e2153a78168921dd5266e094620fc4.png)
+![图片](http://imgcontrol.xiaozha.top/uploads/imgs/d9/a1bb4f04cb8bfebc96521568a2b92a.png)
+![图片](http://imgcontrol.xiaozha.top/uploads/imgs/40/a6c83c225a850d09b2923b3184c418.png)
+![图片](http://imgcontrol.xiaozha.top/uploads/imgs/a5/ea5620ffb9b6db464096f8ac256189.png)
