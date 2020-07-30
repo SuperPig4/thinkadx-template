@@ -53,12 +53,13 @@
 </template>
 
 <script>
+    import { menu } from '@/utils/api'
     export default {
         data () {
             return {
                 // 系统配置
                 SystemConfig : {
-                    pathNameAr : '编辑'
+                    pathNameAr : ['系统设置','菜单管理','列表','编辑']
                 },
                 id : 0,
                 isShowLoading : true,
@@ -98,7 +99,7 @@
             refresh () {
                 if(this.id) {
                     this.isShowLoading =  true
-                    this.$Cm.api('admin/menu/detail',{
+                    this.$Cm.api(menu.detail,{
                         id : this.$route.params.id
                     }).then(res => {
                         res.run(false).then(() => {
@@ -147,7 +148,7 @@
                 this.$refs['formValidate'].validate(valiRes => {
                     if(valiRes) {
                         this.isShowLoading = true
-                        this.$Cm.api('admin/menu/add_edit', Object.assign({}, this.submitData, {
+                        this.$Cm.api(menu.addOrEdit(this.id), Object.assign({}, this.submitData, {
                             status : Number(this.submitData.status)
                         })).then(res => {
                             this.isShowLoading = false

@@ -2,7 +2,7 @@ import md5 from 'js-md5'
 import store from '@/state/index'
 import iview from 'iview'
 import moment from 'moment'
-
+import router from '@/router/index'
 
 export default {
     install : function(Vue, options) {
@@ -95,9 +95,6 @@ export default {
                     Config.isAllowForceDropOutLogin = false
                     store.commit('EmptyUserInfo')
                     router.push({ path:'/' })
-                    // this.api('admin/admin_user/logout').finally(() => {
-                    //     router.push({ path:'/' })
-                    // })
                 }
             },
 
@@ -151,16 +148,20 @@ export default {
                     if(e instanceof Array) {
                         url = e[0];
                         method = e[1];
+                        if(e[2]) data = Object.assign(data, e[2]);
                     } else if(typeof(e) == 'object') {
                         url = e.url;
                         method = e.method;
+                        if(e.data) data = Object.assign(data, e.data);
                     }
                     
                     Vue.axios({
                         method : method,
-                        url : Config.apiDomain + url,
+                        url : url,
+                        baseURL : Config.apiDomain,
                         headers : headers,
-                        data : data
+                        params : method == 'GET' ? data : {},
+                        data : method != 'GET' ? data : {}
                     }).then(res => {
                         // 保存新的令牌
                         if(res.headers['access-token'] && store.getters.getToken() && (store.getters.getToken() != res.headers['access-token'])) {

@@ -36,12 +36,13 @@
 </template>
 
 <script>
+    import { config } from '@/utils/api'
     export default {
         data () {
             return {
                 // 系统配置
                 SystemConfig : {
-                    pathNameAr : '编辑'
+                    pathNameAr : ['系统设置','系统配置','列表','编辑']
                 },
                 id : 0,
                 isShowLoading : false,
@@ -71,7 +72,7 @@
             this.$route.params.id && (this.id = this.$route.params.id)
             if(this.id) {
                 this.isShowLoading = true
-                this.$Cm.api('admin/config/detail',{
+                this.$Cm.api(config.detail,{
                     id : this.id
                 }).then(res => {
                     res.run(false).then(() => {
@@ -87,7 +88,7 @@
                 this.$refs['formValidate'].validate(valiRes => {
                     if(valiRes) {
                         this.isShowLoading = true
-                        this.$Cm.api('admin/config/add_edit', Object.assign({}, this.submitData)).then(res => {
+                        this.$Cm.api(config.addOrEdit(this.id), Object.assign({}, this.submitData)).then(res => {
                             res.run().then(() => {
                                 this.$router.back()
                             })

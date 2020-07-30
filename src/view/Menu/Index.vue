@@ -16,6 +16,7 @@
 </template>
 
 <script>
+import { menu } from '@/utils/api'
 export default {
     configx : {
         title : 'ces',
@@ -40,7 +41,7 @@ export default {
         },
         getListData () {
             this.isShowLoading = true
-            this.$Cm.api('admin/menu/index').then(res => {
+            this.$Cm.api(menu.index).then(res => {
                 let newList = []
                 for(var i in res.data) {
                     var item = res.data[i]
@@ -51,7 +52,6 @@ export default {
                     newList.push(item)
                 }
                 this.list = newList
-                console.log(this.list)
             }).finally(() => {
                 this.isShowLoading =  false
             })
@@ -59,62 +59,91 @@ export default {
         getRender (h, { root, node, data }, isShowBut = true) {
             let self = this
             let button = [
-                h('Button', {
-                    attrs : {title : '详情'},
-                    props : {icon: 'md-albums'},
-                    class : 'button-x',
-                    on: {
-                        click: () => {
-                            this.jumpAddEdit(data.father_id, data.id)
+                h(
+                    'Button', 
+                    {
+                        attrs : {title : '详情'},
+                        class : 'button-x',
+                        on: {
+                            click: () => {
+                                this.jumpAddEdit(data.father_id, data.id)
+                            }
                         }
-                    }
-                }),
-                h('Button', {
-                    attrs : {title : '删除'},
-                    props: {icon: 'ios-remove'},
-                    class : 'button-x',
-                    on: {
-                        click: () => { 
-                            this.$Modal.confirm({
-                                loading: true,
-                                title: '提示',
-                                content: '数据删除后将无法恢复,是否确定删除?',
-                                cancelText: '取消',
-                                okText: '确定',
-                                onOk () {
-                                    this.$Cm.api('admin/menu/delete',{
-                                        id : data.id
-                                    }).then(res => {
-                                        res.run(false).then(() => {
-                                            this.$Message.info('操作成功,刷新数据中...');
-                                            self.isShowLoading = true
-                                            self.list = []
-                                            self.getListData()
-                                        })
-                                    }).finally(() => {
-                                        this.$Modal.remove();
-                                    })
-                                }
-                            })
-                        }
-                    }
-                })
-            ]
-            if(isShowBut) {
-                button.push(
-                    h('Button', {
-                        attrs : {title : '增加'},
-                        props : {icon: 'ios-add'},
+                    },
+                    [
+                        h('Icon', {
+                            props : {
+                                size : 18,
+                                type : 'md-albums'
+                            }
+                        })
+                    ]
+                ),
+                h(
+                    'Button', 
+                    {
+                        attrs : {title : '删除'},
                         class : 'button-x',
                         on: {
                             click: () => { 
-                                this.jumpAddEdit(data.id)
+                                this.$Modal.confirm({
+                                    loading: true,
+                                    title: '提示',
+                                    content: '数据删除后将无法恢复,是否确定删除?',
+                                    cancelText: '取消',
+                                    okText: '确定',
+                                    onOk () {
+                                        this.$Cm.api(menu.delete,{
+                                            id : data.id
+                                        }).then(res => {
+                                            res.run(false).then(() => {
+                                                this.$Message.info('操作成功,刷新数据中...');
+                                                self.isShowLoading = true
+                                                self.list = []
+                                                self.getListData()
+                                            })
+                                        }).finally(() => {
+                                            this.$Modal.remove();
+                                        })
+                                    }
+                                })
                             }
                         }
-                    }),
-                    
-                )
+                    },
+                    [
+                        h('Icon', {
+                            props : {
+                                size : 18,
+                                type : 'md-trash'
+                            }
+                        })
+                    ]
+                ),
+            ]
 
+            if(isShowBut) {
+                button.push(
+                    h(
+                        'Button', 
+                        {
+                            attrs : {title : '增加'},
+                            class : 'button-x',
+                            on: {
+                                click: () => { 
+                                    this.jumpAddEdit(data.id)
+                                }
+                            }
+                        },
+                        [
+                            h('Icon', {
+                                props : {
+                                    size : 18,
+                                    type : 'md-add-circle'
+                                }
+                            })
+                        ]
+                    ),
+                )
             }
             return h('span', {
                 style: {

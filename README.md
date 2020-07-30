@@ -15,7 +15,7 @@ Thinkadx-template
 安装所有依赖
 2、npm install
 
-3、打开 src/plugins/Cm.js 将 Config.apiDomain 的接口域名换成你搭建的thinkadx服务器端地址
+3、修改配置信息copy一份.example.env并改名为.env,按照注释填写参数即可
 
 启动vue3的ui界面
 4、vue ui

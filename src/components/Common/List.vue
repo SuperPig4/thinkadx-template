@@ -65,6 +65,10 @@
                 type : String,
                 required: true
             },
+            // API对象
+            api : {
+                type : Object
+            },
             // 项
             column : {
                 type : Array,
@@ -131,7 +135,7 @@
                             } 
 
                             this.isShowLoading = true
-                            this.$Cm.api('admin/'+ this.controller +'/delete',{
+                            this.$Cm.api(this.getApiUrl('delete'),{
                                 id : ids
                             }).then(res => {
                                 res.run(false).then(() => {
@@ -144,6 +148,14 @@
                             })
                         }
                     })
+                }
+            },
+            // 获得API地址
+            getApiUrl (action) {
+                if(this.api && this.api[action]) {
+                    return this.api[action];
+                } else {
+                    return 'admin/'+ this.controller + '/' + action;
                 }
             },
             // 搜索
@@ -181,7 +193,7 @@
                 }
                 
                 // 获得列表
-                let url = 'admin/' + this.controller + '/index'
+                let url = this.getApiUrl('index')
                 this.list = []
                 let listRes = await this.$Cm.api(url, submitData)
                 listRes.run(false).then(() => {

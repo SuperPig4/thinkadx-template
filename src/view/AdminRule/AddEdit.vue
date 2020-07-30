@@ -30,12 +30,13 @@
 </template>
 
 <script>
+    import { admin } from '@/utils/api'
     export default {
         data () {
             return {
                 // 系统配置
                 SystemConfig : {
-                    pathNameAr : '编辑'
+                    pathNameAr : ['系统设置','分组规则','列表','编辑']
                 },
                 // 数据id
                 id : 0,
@@ -63,7 +64,7 @@
             refresh () {
                 if(this.id) {
                     this.isShowLoading = true
-                    this.$Cm.api('admin/admin_rule/detail',{
+                    this.$Cm.api(admin.rule.detail,{
                         id : this.id
                     }).then(res => {
                         res.run(false).then(() => {
@@ -78,7 +79,7 @@
                 this.$refs['formValidate'].validate(valiRes => {
                     if(valiRes) {
                         this.isShowLoading = true
-                        this.$Cm.api('admin/admin_rule/add_edit', Object.assign({}, this.submitData)).then(res => {
+                        this.$Cm.api(admin.rule.addOrEdit(this.id), Object.assign({}, this.submitData)).then(res => {
                             res.run().then(() => {
                                 this.$router.back()
                             })

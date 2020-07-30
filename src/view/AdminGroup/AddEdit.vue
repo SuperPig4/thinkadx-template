@@ -43,12 +43,13 @@
 </template>
 
 <script>
+    import { admin } from '@/utils/api'
     export default {
         data () {
             return {
                 // 系统配置
                 SystemConfig : {
-                    pathNameAr : '编辑'
+                    pathNameAr : ['系统设置','管理员分组','列表','编辑']
                 },
                 // 数据id
                 id : 0,
@@ -72,7 +73,7 @@
         },
         created() {
             this.$route.params.id && (this.id = this.$route.params.id)
-            this.$Cm.api('admin/admin_rule/index',{
+            this.$Cm.api(admin.rule.index,{
                 all : 1
             }).then(res => {
                 res.run(false).then(() => {
@@ -93,7 +94,7 @@
             refresh () {
                 if(this.id) {
                     this.isShowLoading = true
-                    this.$Cm.api('admin/admin_group/detail',{
+                    this.$Cm.api(admin.group.detail,{
                         id : this.id
                     }).then(res => {
                         res.run(false).then(() => {
@@ -113,7 +114,7 @@
                 this.$refs['formValidate'].validate(valiRes => {
                     if(valiRes) {
                         this.isShowLoading = true
-                        this.$Cm.api('admin/admin_group/add_edit', Object.assign({}, this.submitData, {
+                        this.$Cm.api(admin.group.addOrEdit(this.id), Object.assign({}, this.submitData, {
                             status : Number(this.submitData.status),
                             rules : this.submitData.rules
                         })).then(res => {

@@ -4,6 +4,7 @@
             ref="CmList"
             @del="del"
             :catchDelBut="true"
+            :api="listConfig.api"
             :controller="listConfig.controller"
             :searchPlaceholder="listConfig.searchPlaceholder"
             :column="column">
@@ -11,23 +12,17 @@
     </div>
 </template>
 <script>
+    import { admin } from '@/utils/api'
     export default {
         data () {
             return {
                 // 系统配置
                 SystemConfig : {
-                    pathNameAr : ['系统设置','管理员管理','列表'],
-                    contentStyle : {
-                        layout : {
-                            padding: '0px'
-                        },
-                        card : {
-                            background : '#597'
-                        }
-                    }
+                    pathNameAr : ['系统设置','管理员管理','列表']
                 },
                 // 列表组件配置参数
                 listConfig : {
+                    api : admin.user,
                     controller : 'admin_user',
                     searchPlaceholder : '用户ID或昵称'
                 },
@@ -118,7 +113,7 @@
                         } 
 
                         this.isShowLoading = true
-                        this.$Cm.api('admin/admin_user/delete',{
+                        this.$Cm.api(admin.user.delete,{
                             delete_id : ids
                         }).then(res => {
                             res.run(false).then(() => {

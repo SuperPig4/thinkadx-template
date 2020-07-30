@@ -16,6 +16,7 @@
     </div>
 </template>
 <script>
+    import { menu } from '@/utils/api'
     export default {
         data () {
             return {
@@ -25,7 +26,7 @@
         },
         created () {
             // 菜单
-            this.$Cm.api('admin/menu/get_list').then(res => {
+            this.$Cm.api(menu.getList).then(res => {
                 this.menuList = res.data
                 this.isShowLoading = false
             })

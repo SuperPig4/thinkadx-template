@@ -2,6 +2,7 @@
     <div>
         <Cm-List 
             ref="CmList"
+            :api="listConfig.api"
             :controller="listConfig.controller"
             :searchPlaceholder="listConfig.searchPlaceholder"
             :column="column">
@@ -9,6 +10,7 @@
     </div>
 </template>
 <script>
+    import { admin } from '@/utils/api'
     export default {
         data () {
             return {
@@ -18,6 +20,7 @@
                 },
                 // 列表组件配置参数
                 listConfig : {
+                    api : admin.rule,
                     controller : 'admin_rule',
                     searchPlaceholder : 'ID或描述'
                 },

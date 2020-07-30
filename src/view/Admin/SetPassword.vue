@@ -17,6 +17,7 @@
     </div>
 </template>
 <script>
+    import { admin } from '@/utils/api'
     export default {
         data () {
             return {
@@ -41,7 +42,7 @@
                 this.$refs['formValidate'].validate(valiRes => {
                     if(valiRes) {
                         this.isShowLoading = true
-                        this.$Cm.api('admin/admin_user/set_password', Object.assign({}, this.submitData, {
+                        this.$Cm.api(admin.user.setPassword, Object.assign({}, this.submitData, {
                             id : (this.$route.params.id || ''),
                             oauth_type: "pwd",
                             port_type: "api"

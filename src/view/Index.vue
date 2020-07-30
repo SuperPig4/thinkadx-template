@@ -90,7 +90,7 @@
     </div>
 </template>
 <script>
-    import { admin,system,tool } from '@/utils/api'
+    import { admin, system, tool } from '@/utils/api'
     import CmMenu from './Menu'
     export default {
         data () {
@@ -129,7 +129,7 @@
         },
         created () {
             // 用户信息
-            this.$Cm.api(admin.adminUser.info).then(res => {
+            this.$Cm.api(admin.user.info).then(res => {
                 res.run(false).then(() => {
                     this.$store.commit("SetUserInfo", res.data)
                 })
@@ -180,11 +180,7 @@
              * @param string/array 如果是数组则直接覆盖/否则只是push
              */
             setPathNameAr (value) {
-                if(value instanceof Array) {
-                    this.pathNameAr = value.concat()
-                } else {
-                    this.pathNameAr.push(value)
-                }
+                this.pathNameAr = value
             },
             // 跳转到main
             jumpMain () {
@@ -200,7 +196,11 @@
             userDropdownEv (name) {
                 switch(name) {
                     case 'dropOutLogin' :
-                            this.$Cm.dropOutLogin()
+                            this.$Spin.show();
+                            this.$Cm.api(admin.user.logout).finally(() => {
+                                this.$Spin.hide()
+                                this.$Cm.dropOutLogin()
+                            })
                         break;
                     case 'setPassword' :
                             this.$router.push('/main/set_password')

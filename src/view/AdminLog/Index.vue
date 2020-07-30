@@ -2,6 +2,7 @@
     <div>
         <Cm-List 
             ref="CmList"
+            :api="listConfig.api"
             :controller="listConfig.controller"
             :searchPlaceholder="listConfig.searchPlaceholder"
             :column="column">
@@ -12,6 +13,7 @@
     </div>
 </template>
 <script>
+    import { admin } from '@/utils/api'
     export default {
         data () {
             return {
@@ -21,6 +23,9 @@
                 },
                 // 列表组件配置参数
                 listConfig : {
+                    api : {
+                        index : admin.adminLog
+                    },
                     controller : 'admin_log',
                     searchPlaceholder : '数据id或管理员id'
                 },
@@ -50,6 +55,10 @@
                     {
                         title : 'ip',
                         key : 'ip'
+                    },
+                    {
+                        title : '操作时间',
+                        key : 'act_time'
                     }
                 ]
             }
