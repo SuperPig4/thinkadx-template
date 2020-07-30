@@ -65,19 +65,19 @@
                 </Header>
                 
                 <!-- 右侧内容 -->
-                <Layout :style="{padding: '15px', paddingBottom: '60px', height:'93%'}" >
+                <Layout :style="contentStyleLayout" >
                     <!-- 路径 -->
                     <Breadcrumb :style="{margin: '10px 0 15px', textAlign:'left'}">
                         <BreadcrumbItem v-for="item in pathNameAr" v-bind:key="item" >{{item}}</BreadcrumbItem>
                     </Breadcrumb>
 
                     <!-- 内容 -->
-                    <Card :style="{overflow:'auto'}">
-                        <Content :style="{position : 'relative', background: '#fff'}" >
+                    <Card :style="contentStyleCard">
+                        <Content :style="{position : 'relative'}" >
                             <keep-alive>
-                                <router-view ref="routerView" @on-topSetPathNameAr="setPathNameAr" v-if="$route.meta.keepAlive" ></router-view>
+                                <router-view ref="routerView" @on-setContentStyle="setContentStyle" @on-topSetPathNameAr="setPathNameAr" v-if="$route.meta.keepAlive" ></router-view>
                             </keep-alive>
-                            <router-view ref="routerView" @on-topSetPathNameAr="setPathNameAr" v-if="!$route.meta.keepAlive" ></router-view>
+                            <router-view ref="routerView" @on-setContentStyle="setContentStyle" @on-topSetPathNameAr="setPathNameAr" v-if="!$route.meta.keepAlive" ></router-view>
                         </Content>
                     </Card>
                 </Layout>
@@ -99,11 +99,33 @@
                 pathNameAr : [
                     'Loading'
                 ],
-                isCollapsed : false
+                // 是否收起菜单
+                isCollapsed : false,
+                // 内容节点默认样式
+                contentStyle : {
+                    // 默认
+                    default : {
+                        layout : {padding: '15px', paddingBottom: '60px', height:'93%'},
+                        card : {overflow:'auto'}
+                    },
+                    // 改动的
+                    change : {
+                        layout : {},
+                        card : {}
+                    }
+                }
             }
         },
         components : {
             CmMenu
+        },
+        computed : {
+            contentStyleLayout () {
+                return Object.assign({}, this.contentStyle.default.layout, this.contentStyle.change.layout);
+            },
+            contentStyleCard () {
+                return Object.assign({}, this.contentStyle.default.card, this.contentStyle.change.card);
+            },
         },
         created () {
             // 用户信息
@@ -135,14 +157,33 @@
                 }
             },
             /**
+             * 修改内容节点样式
+             * @param object
+             */
+            setContentStyle (style) {
+                let e = {
+                    layout : {},
+                    card : {}
+                };
+
+                if(style) {
+                    e = {
+                        layout : style.layout || {},
+                        card : style.card || {}
+                    };
+                }
+
+                this.contentStyle.change = e;
+            },
+            /**
              * 修改路径名
              * @param string/array 如果是数组则直接覆盖/否则只是push
              */
-            setPathNameAr (age) {
-                if(age instanceof Array) {
-                    this.pathNameAr = age.concat()
+            setPathNameAr (value) {
+                if(value instanceof Array) {
+                    this.pathNameAr = value.concat()
                 } else {
-                    this.pathNameAr.push(age)
+                    this.pathNameAr.push(value)
                 }
             },
             // 跳转到main

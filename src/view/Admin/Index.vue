@@ -16,7 +16,15 @@
             return {
                 // 系统配置
                 SystemConfig : {
-                    pathNameAr : ['系统设置','管理员管理','列表']
+                    pathNameAr : ['系统设置','管理员管理','列表'],
+                    contentStyle : {
+                        layout : {
+                            padding: '0px'
+                        },
+                        card : {
+                            background : '#597'
+                        }
+                    }
                 },
                 // 列表组件配置参数
                 listConfig : {

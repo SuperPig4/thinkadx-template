@@ -53,10 +53,14 @@ export default {
             this.$nextTick(function () {
                 if(params) {
                     let Config = Object.assign({}, (params || {}))
+                    
                     // 路径逻辑
                     if(Config.pathNameAr) {
                         this.$emit('on-topSetPathNameAr', Config.pathNameAr)
                     }
+
+                    // 内容节点样式
+                    this.$emit('on-setContentStyle', Config.contentStyle)
                 }      
             })
         }
