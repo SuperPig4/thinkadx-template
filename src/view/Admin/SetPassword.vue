@@ -44,7 +44,7 @@
                         this.isShowLoading = true
                         this.$Cm.api(admin.user.setPassword, Object.assign({}, this.submitData, {
                             id : (this.$route.params.id || ''),
-                            oauth_type: "pwd",
+                            oauth_type: "password",
                             port_type: "api"
                         })).then(res => {
                             res.run()
