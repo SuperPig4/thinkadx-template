@@ -182,31 +182,38 @@ export default {
                             // 判断状态码
                             switch(res.response.status) {
                                 case 401 :
-                                    // 如果当前已经带上了刷新令牌还是401则表示令牌无效了
-                                    if(headers['refresh-token']) {
-                                        let expireTimeDate = moment.unix(store.state.refresh_token.system_expire_time);
+                                        // 如果当前已经带上了刷新令牌还是401则表示令牌无效了
+                                        if(headers['refresh-token']) {
+                                            let expireTimeDate = moment.unix(store.state.refresh_token.system_expire_time);
+                                            iview.Modal.error({
+                                                title : '提示',
+                                                content : moment().isBefore(expireTimeDate) ? '您的账号在其他地方登录了' : '登录凭证已过期,请重新登录' ,
+                                                onOk : () => {
+                                                    Vue.prototype.$Cm.dropOutLogin()
+                                                },
+                                            })
+                                            reject(res);
+                                        } else {
+                                            let refreshToken = store.getters.getToken('refresh');
+                                            if(refreshToken && isUseToken === true) {
+                                                // 刷新令牌
+                                                this.api(e, data, config, Object.assign({
+                                                    'refresh-token' : refreshToken
+                                                }, header), isUseToken).then(res => {
+                                                    resolve(runData);
+                                                }).catch(res => {
+                                                    reject(res);
+                                                })
+                                            }
+                                        }
+                                    break;
+                                default : 
                                         iview.Modal.error({
                                             title : '提示',
-                                            content : moment().isBefore(expireTimeDate) ? '您的账号在其他地方登录了' : '登录凭证已过期,请重新登录' ,
-                                            onOk : () => {
-                                                Vue.prototype.$Cm.dropOutLogin()
-                                            },
-                                        })
+                                            content : typeof(res.response.data) == 'object' ? res.response.data.msg : res.response.statusText
+                                        });
                                         reject(res);
-                                    } else {
-                                        let refreshToken = store.getters.getToken('refresh');
-                                        if(refreshToken && isUseToken === true) {
-                                            // 刷新令牌
-                                            this.api(e, data, config, Object.assign({
-                                                'refresh-token' : refreshToken
-                                            }, header), isUseToken).then(res => {
-                                                resolve(runData);
-                                            }).catch(res => {
-                                                reject(res);
-                                            })
-                                        }
-                                    }
-                                break;
+                                    break;
                             }
                         } else {
                             if(config.sendOrCodeErrIsPop) {
